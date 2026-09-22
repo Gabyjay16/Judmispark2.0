@@ -61,10 +61,14 @@ export function calculateMatchScore(currentUser: UserProfile, candidate: UserPro
   }
 
   // 3. Relationship Intentions
-  const isSameIntention = candidate.relationshipIntention === currentUser.relationshipIntention;
+  const candidateIntents: string[] = candidate.relationshipIntentions || [candidate.relationshipIntention];
+  const userIntents: string[] = currentUser.relationshipIntentions || [currentUser.relationshipIntention];
+  const isSameIntention = candidateIntents.some(ci => 
+    userIntents.some(ui => ui === ci || (typeof ui === 'string' && ui.includes(ci)) || (typeof ci === 'string' && ci.includes(ui)))
+  );
   if (isSameIntention) {
     score += 20;
-    reasons.push(`Same intention (${candidate.relationshipIntention})`);
+    reasons.push(`Shared intention`);
   } else {
     // Compatible intentions
     const compatiblePairs = [
@@ -74,8 +78,8 @@ export function calculateMatchScore(currentUser: UserProfile, candidate: UserPro
       ['Casual social connection', 'Just meeting people'],
       ['Networking', 'Just meeting people']
     ];
-    const isCompatible = compatiblePairs.some(
-      ([a, b]) => candidate.relationshipIntention === a && currentUser.relationshipIntention === b
+    const isCompatible = compatiblePairs.some(([a, b]) =>
+      candidateIntents.some(ci => ci.includes(a)) && userIntents.some(ui => ui.includes(b))
     );
     if (isCompatible) {
       score += 10;
@@ -144,8 +148,12 @@ export function filterAndRankProfiles(
     }
 
     // Relationship intention filter
-    if (filters.intention !== 'All' && p.relationshipIntention !== filters.intention) {
-      return false;
+    if (filters.intention !== 'All') {
+      const pIntents: string[] = p.relationshipIntentions || [p.relationshipIntention];
+      const matchIntent = pIntents.some(pi => pi === filters.intention || (typeof pi === 'string' && pi.includes(filters.intention)));
+      if (!matchIntent) {
+        return false;
+      }
     }
 
     return true;

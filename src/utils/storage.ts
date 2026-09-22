@@ -14,7 +14,8 @@ import {
   AdminAuditLog, 
   InAppNotification,
   TownLocation,
-  LikeRecord
+  LikeRecord,
+  PaymentInfoConfig
 } from '../types';
 
 const STORAGE_KEYS = {
@@ -37,6 +38,21 @@ const STORAGE_KEYS = {
   BLOCKED_USERS: 'judmispark_blocked_users',
   LIKES: 'judmispark_likes',
   EVENT_REMINDERS: 'judmispark_event_reminders',
+  SEEN_REFERRAL_POPUP: 'judmispark_seen_referral_promo',
+  AUTH_LOGGED_IN: 'judmispark_auth_logged_in',
+  PAYMENT_INFO: 'judmispark_payment_info',
+};
+
+// Default Official Payment Info configured by Admin for User Top-Ups
+export const DEFAULT_PAYMENT_INFO: PaymentInfoConfig = {
+  mtnMomoNumber: '+237 671 234 567',
+  mtnMomoName: 'JudmiSpark Escrow / Gabriel T.',
+  orangeMoneyNumber: '+237 691 234 567',
+  orangeMoneyName: 'JudmiSpark Escrow / Gabriel T.',
+  instructionsEn: 'Transfer the exact CFA amount via your MTN MoMo or Orange Money dial code. Use your Spark Wallet ID or Display Name as the transfer reason/note. After confirming, take a clear screenshot of the SMS or app receipt and upload it below for immediate admin approval.',
+  instructionsFr: 'Transférez le montant exact en CFA via votre code MTN MoMo ou Orange Money. Mettez votre ID Portefeuille Spark ou Pseudo en motif du transfert. Après confirmation, prenez une capture d\'écran claire du reçu et téléversez-la ci-dessous pour validation immédiate par l\'administrateur.',
+  updatedAt: new Date().toISOString(),
+  updatedBy: 'Admin (Gabriel)'
 };
 
 // Initial Registered Current User
@@ -46,11 +62,17 @@ const DEFAULT_USER: UserProfile = {
   displayName: 'Brandon',
   email: 'gabyjay16@gmail.com',
   phoneNumber: '+237 671 234 567',
+  pin: '123456',
+  password: '123456',
   role: 'admin',
   dateOfBirth: '1998-05-14',
   age: 26,
   gender: 'male',
   genderPreference: 'women',
+  nationality: 'Cameroon',
+  countryCode: 'CM',
+  currency: 'XAF',
+  preferredLanguage: 'en',
   town: 'Bamenda',
   neighborhood: 'Commercial Avenue',
   profilePicture: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
@@ -87,8 +109,14 @@ const INITIAL_USERS: UserProfile[] = [
     id: 'usr_sarah_bamenda',
     fullName: 'Sarah Nfor',
     displayName: 'Sarah',
+    email: 'sarah.bda@gmail.com',
     phoneNumber: '+237 677 889 900',
+    pin: '123456',
+    password: '123456',
     role: 'user',
+    nationality: 'Cameroon',
+    countryCode: 'CM',
+    currency: 'XAF',
     dateOfBirth: '2000-03-22',
     age: 24,
     gender: 'female',
@@ -127,8 +155,14 @@ const INITIAL_USERS: UserProfile[] = [
     id: 'usr_junior_douala',
     fullName: 'Junior Ebongue',
     displayName: 'Junior',
+    email: 'junior.douala@gmail.com',
     phoneNumber: '+237 699 112 233',
+    pin: '123456',
+    password: '123456',
     role: 'user',
+    nationality: 'Cameroon',
+    countryCode: 'CM',
+    currency: 'XAF',
     dateOfBirth: '1997-08-11',
     age: 27,
     gender: 'male',
@@ -167,8 +201,14 @@ const INITIAL_USERS: UserProfile[] = [
     id: 'usr_chloe_yaounde',
     fullName: 'Chloe Bella',
     displayName: 'Chloe',
+    email: 'chloe.yaounde@gmail.com',
     phoneNumber: '+237 655 443 322',
+    pin: '123456',
+    password: '123456',
     role: 'user',
+    nationality: 'Cameroon',
+    countryCode: 'CM',
+    currency: 'XAF',
     dateOfBirth: '2001-11-04',
     age: 23,
     gender: 'female',
@@ -833,6 +873,70 @@ class StorageManager {
     }
   }
 
+  isUserLoggedIn(): boolean {
+    const raw = localStorage.getItem(STORAGE_KEYS.AUTH_LOGGED_IN);
+    if (raw === null) return true; // Default to true for existing active session
+    return raw === 'true';
+  }
+
+  setUserLoggedIn(loggedIn: boolean): void {
+    localStorage.setItem(STORAGE_KEYS.AUTH_LOGGED_IN, loggedIn ? 'true' : 'false');
+  }
+
+  logoutUser(): void {
+    this.setUserLoggedIn(false);
+  }
+
+  loginUserWithId(userId: string): UserProfile | null {
+    const users = this.getUsers();
+    const target = users.find(u => u.id === userId);
+    if (target) {
+      this.setCurrentUser(target);
+      this.setUserLoggedIn(true);
+      return target;
+    }
+    return null;
+  }
+
+  loginUserWithEmail(email: string, password?: string): { success: boolean; user?: UserProfile; message?: string } {
+    const cleanEmail = email.trim().toLowerCase();
+    const users = this.getUsers();
+    const match = users.find(u => (u.email || '').trim().toLowerCase() === cleanEmail);
+
+    if (!match) {
+      return { success: false, message: 'Account not found with this email. Please check your email or register.' };
+    }
+
+    if (match.status === 'banned') {
+      return { success: false, message: 'This account has been banned due to platform guidelines violations.' };
+    }
+
+    const targetPassword = match.password || match.pin;
+    if (targetPassword && password && password.trim() !== targetPassword.trim()) {
+      return { success: false, message: 'Incorrect password. Please verify your 6-character password.' };
+    }
+
+    this.setCurrentUser(match);
+    this.setUserLoggedIn(true);
+    return { success: true, user: match };
+  }
+
+  loginUserWithPhone(phoneNumber: string, pin?: string): { success: boolean; user?: UserProfile; message?: string } {
+    const cleanPhone = phoneNumber.replace(/[\s\-\(\)]/g, '');
+    const users = this.getUsers();
+    const match = users.find(u => {
+      const uPhone = (u.phoneNumber || '').replace(/[\s\-\(\)]/g, '');
+      return uPhone.includes(cleanPhone) || cleanPhone.includes(uPhone);
+    });
+
+    if (match) {
+      this.setCurrentUser(match);
+      this.setUserLoggedIn(true);
+      return { success: true, user: match };
+    }
+    return { success: false, message: 'Account not found. Please register or check phone number.' };
+  }
+
   getCurrentUser(): UserProfile {
     const user = this.getItem<UserProfile>(STORAGE_KEYS.CURRENT_USER, DEFAULT_USER);
     // Ensure gabyjay16@gmail.com is designated as Admin
@@ -934,6 +1038,12 @@ class StorageManager {
 
   setLinkUps(linkups: LinkUpPost[]): void {
     this.setItem(STORAGE_KEYS.LINKUPS, linkups);
+  }
+
+  deleteLinkUp(postId: string): void {
+    const all = this.getLinkUps();
+    const filtered = all.filter(p => p.id !== postId);
+    this.setLinkUps(filtered);
   }
 
   getTalkPosts(): TalkPost[] {
@@ -1280,6 +1390,427 @@ class StorageManager {
     }
     this.setEventReminders(userId, reminders);
     return isNowReminded;
+  }
+
+  // FIRST-TIME LOGIN REFERRAL PROMO POPUP
+  hasUserSeenReferralPromo(userId: string): boolean {
+    const map = this.getItem<Record<string, boolean>>(STORAGE_KEYS.SEEN_REFERRAL_POPUP, {});
+    return !!map[userId];
+  }
+
+  markUserSeenReferralPromo(userId: string): void {
+    const map = this.getItem<Record<string, boolean>>(STORAGE_KEYS.SEEN_REFERRAL_POPUP, {});
+    map[userId] = true;
+    this.setItem(STORAGE_KEYS.SEEN_REFERRAL_POPUP, map);
+  }
+
+  // PAYMENT INFO CONFIGURATION (Admin-managed MoMo / Orange Money instructions)
+  getPaymentInfo(): PaymentInfoConfig {
+    return this.getItem<PaymentInfoConfig>(STORAGE_KEYS.PAYMENT_INFO, DEFAULT_PAYMENT_INFO);
+  }
+
+  setPaymentInfo(info: PaymentInfoConfig): void {
+    this.setItem(STORAGE_KEYS.PAYMENT_INFO, info);
+  }
+
+  // Calculate available Sparks (balance minus pending withdrawal requests on hold)
+  calculateAvailableBalance(userId: string): number {
+    const totalBalance = this.calculateSparkBalance(userId);
+    const txs = this.getTransactions();
+    let pendingWithdrawalSparks = 0;
+    for (const tx of txs) {
+      if (tx.userId === userId && tx.transactionType === 'WITHDRAWAL' && tx.status === 'PENDING') {
+        pendingWithdrawalSparks += tx.sparks;
+      }
+    }
+    return Math.max(0, totalBalance - pendingWithdrawalSparks);
+  }
+
+  // Check if user has admin or wallet approver access
+  canUserApproveWallets(user: UserProfile): boolean {
+    if (!user) return false;
+    return user.role === 'admin' || user.email === 'gabyjay16@gmail.com' || Boolean(user.canApproveWallets);
+  }
+
+  // Grant or revoke wallet top-up and withdrawal approval rights
+  toggleWalletApprover(userId: string, adminUser: UserProfile): boolean {
+    const users = this.getUsers();
+    const target = users.find(u => u.id === userId);
+    if (!target) return false;
+
+    const nextVal = !target.canApproveWallets;
+    target.canApproveWallets = nextVal;
+
+    const updatedList = users.map(u => u.id === userId ? { ...u, canApproveWallets: nextVal } : u);
+    this.setItem(STORAGE_KEYS.USERS, updatedList);
+
+    const currentUser = this.getCurrentUser();
+    if (currentUser.id === userId) {
+      this.setCurrentUser({ ...currentUser, canApproveWallets: nextVal });
+    }
+
+    this.addAuditLog({
+      id: `log_perm_${Date.now()}`,
+      action: nextVal ? 'GRANT_WALLET_APPROVER' : 'REVOKE_WALLET_APPROVER',
+      adminId: adminUser.id,
+      adminName: adminUser.displayName,
+      targetType: 'user',
+      targetId: userId,
+      reason: `${nextVal ? 'Granted' : 'Revoked'} wallet top-up & withdrawal approval rights for ${target.displayName}`,
+      createdAt: new Date().toISOString()
+    });
+
+    this.addNotification({
+      id: `notif_${Date.now()}`,
+      userId: target.id,
+      title: nextVal ? '💰 Wallet Approver Access Granted' : 'Wallet Approver Access Revoked',
+      message: nextVal 
+        ? 'You have been authorized to review payment screenshots, approve/reject wallet top-ups, and process withdrawals.'
+        : 'Your wallet approver permissions have been removed by the administrator.',
+      type: 'admin_alert',
+      read: false,
+      createdAt: new Date().toISOString()
+    });
+
+    return nextVal;
+  }
+
+  // Notify admins and wallet approvers (in-app + browser notification + sound chime)
+  notifyAdminsAndApprovers(title: string, message: string, relatedId?: string): void {
+    const users = this.getUsers();
+    const approvers = users.filter(u => this.canUserApproveWallets(u));
+
+    approvers.forEach(approver => {
+      this.addNotification({
+        id: `admin_notif_${Date.now()}_${approver.id}`,
+        userId: approver.id,
+        title,
+        message,
+        type: 'admin_alert',
+        relatedId,
+        read: false,
+        createdAt: new Date().toISOString()
+      });
+    });
+
+    triggerBrowserNotification(title, message);
+  }
+
+  // Create a pending top-up deposit request with screenshot proof
+  createTopUpRequest(data: {
+    userId: string;
+    walletId: string;
+    sparks: number;
+    cfaAmount: number;
+    provider: 'MTN_MOMO' | 'ORANGE_MONEY';
+    senderPhone: string;
+    reference: string;
+    screenshotUrl?: string;
+    note?: string;
+  }): WalletTransaction {
+    const newTx: WalletTransaction = {
+      id: `tx_topup_${Date.now()}`,
+      walletId: data.walletId,
+      userId: data.userId,
+      transactionType: 'DEPOSIT',
+      sparks: data.sparks,
+      cfaAmount: data.cfaAmount,
+      reference: data.reference,
+      provider: data.provider,
+      providerReference: data.senderPhone,
+      screenshotUrl: data.screenshotUrl,
+      momoNumber: data.senderPhone,
+      status: 'PENDING',
+      createdAt: new Date().toISOString(),
+      note: data.note || `Top-up request: ${data.sparks} Sparks (${data.cfaAmount.toLocaleString()} CFA) via ${data.provider === 'ORANGE_MONEY' ? 'Orange Money' : 'MTN MoMo'}`
+    };
+
+    this.addTransaction(newTx);
+
+    const user = this.getUsers().find(u => u.id === data.userId);
+    const userName = user?.displayName || user?.fullName || 'User';
+
+    this.notifyAdminsAndApprovers(
+      '📥 New Wallet Top-Up Pending Review',
+      `${userName} uploaded a MoMo payment screenshot for ${data.sparks} Sparks (${data.cfaAmount.toLocaleString()} CFA). Ref: ${data.reference}`,
+      newTx.id
+    );
+
+    return newTx;
+  }
+
+  // Approve a top-up request and credit sparks
+  approveTopUp(txId: string, reviewerName: string): { success: boolean; message: string } {
+    const txs = this.getTransactions();
+    const tx = txs.find(t => t.id === txId);
+    if (!tx || tx.transactionType !== 'DEPOSIT' || tx.status !== 'PENDING') {
+      return { success: false, message: 'Transaction not found or already processed.' };
+    }
+
+    tx.status = 'COMPLETED';
+    tx.reviewedBy = reviewerName;
+    tx.reviewedAt = new Date().toISOString();
+    this.setTransactions(txs);
+
+    this.addAuditLog({
+      id: `log_topup_appr_${Date.now()}`,
+      action: 'APPROVE_TOPUP',
+      adminId: 'approver',
+      adminName: reviewerName,
+      targetType: 'transaction',
+      targetId: txId,
+      reason: `Approved top-up of ${tx.sparks} Sparks (${tx.cfaAmount.toLocaleString()} CFA) for user ${tx.userId}`,
+      createdAt: new Date().toISOString()
+    });
+
+    this.addNotification({
+      id: `notif_topup_succ_${Date.now()}`,
+      userId: tx.userId,
+      title: '⚡ Sparks Top-Up Approved!',
+      message: `Your payment of ${tx.cfaAmount.toLocaleString()} CFA has been verified. ${tx.sparks} Sparks have been credited to your wallet!`,
+      type: 'spark_received',
+      relatedId: tx.id,
+      read: false,
+      createdAt: new Date().toISOString()
+    });
+
+    return { success: true, message: `Successfully approved and credited ${tx.sparks} Sparks!` };
+  }
+
+  // Reject a top-up request
+  rejectTopUp(txId: string, reviewerName: string, reason?: string): { success: boolean; message: string } {
+    const txs = this.getTransactions();
+    const tx = txs.find(t => t.id === txId);
+    if (!tx || tx.transactionType !== 'DEPOSIT' || tx.status !== 'PENDING') {
+      return { success: false, message: 'Transaction not found or already processed.' };
+    }
+
+    tx.status = 'REJECTED';
+    tx.reviewedBy = reviewerName;
+    tx.reviewedAt = new Date().toISOString();
+    tx.adminRejectionReason = reason || 'Payment could not be verified with MoMo records.';
+    this.setTransactions(txs);
+
+    this.addAuditLog({
+      id: `log_topup_rej_${Date.now()}`,
+      action: 'REJECT_TOPUP',
+      adminId: 'approver',
+      adminName: reviewerName,
+      targetType: 'transaction',
+      targetId: txId,
+      reason: `Rejected top-up ${txId}: ${tx.adminRejectionReason}`,
+      createdAt: new Date().toISOString()
+    });
+
+    this.addNotification({
+      id: `notif_topup_rej_${Date.now()}`,
+      userId: tx.userId,
+      title: '❌ Top-Up Not Approved',
+      message: `Your top-up of ${tx.sparks} Sparks was not approved. Reason: ${tx.adminRejectionReason}. Please contact support if you need assistance.`,
+      type: 'system',
+      relatedId: tx.id,
+      read: false,
+      createdAt: new Date().toISOString()
+    });
+
+    return { success: true, message: 'Top-up request rejected.' };
+  }
+
+  // Create a pending withdrawal request
+  createWithdrawalRequest(data: {
+    userId: string;
+    walletId: string;
+    sparks: number;
+    cfaAmount: number;
+    provider: 'MTN_MOMO' | 'ORANGE_MONEY';
+    momoNumber: string;
+    momoAccountName: string;
+  }): { success: boolean; message?: string; transaction?: WalletTransaction } {
+    const available = this.calculateAvailableBalance(data.userId);
+    if (available < data.sparks) {
+      return { success: false, message: `Insufficient available Sparks. You have ${available} Sparks available.` };
+    }
+
+    const tx: WalletTransaction = {
+      id: `tx_wth_${Date.now()}`,
+      walletId: data.walletId,
+      userId: data.userId,
+      transactionType: 'WITHDRAWAL',
+      sparks: data.sparks,
+      cfaAmount: data.cfaAmount,
+      reference: `WTH-${Date.now()}`,
+      provider: data.provider,
+      providerReference: data.momoNumber,
+      momoNumber: data.momoNumber,
+      momoAccountName: data.momoAccountName,
+      status: 'PENDING',
+      createdAt: new Date().toISOString(),
+      note: `Withdrawal request of ${data.sparks} Sparks (${data.cfaAmount.toLocaleString()} CFA) to ${data.provider === 'ORANGE_MONEY' ? 'Orange Money' : 'MTN MoMo'} (${data.momoNumber} - ${data.momoAccountName})`
+    };
+
+    this.addTransaction(tx);
+
+    const user = this.getUsers().find(u => u.id === data.userId);
+    const userName = user?.displayName || user?.fullName || 'User';
+
+    this.notifyAdminsAndApprovers(
+      '💸 New MoMo Withdrawal Request',
+      `${userName} requested cashout of ${data.cfaAmount.toLocaleString()} CFA (${data.sparks} SPK) to ${data.momoNumber} (${data.momoAccountName}).`,
+      tx.id
+    );
+
+    return { success: true, transaction: tx };
+  }
+
+  // Approve withdrawal and mark sent
+  approveWithdrawal(txId: string, reviewerName: string, providerRef?: string): { success: boolean; message: string } {
+    const txs = this.getTransactions();
+    const tx = txs.find(t => t.id === txId);
+    if (!tx || tx.transactionType !== 'WITHDRAWAL' || tx.status !== 'PENDING') {
+      return { success: false, message: 'Transaction not found or already processed.' };
+    }
+
+    tx.status = 'COMPLETED';
+    tx.reviewedBy = reviewerName;
+    tx.reviewedAt = new Date().toISOString();
+    if (providerRef) {
+      tx.providerReference = providerRef;
+    }
+    this.setTransactions(txs);
+
+    this.addAuditLog({
+      id: `log_wth_appr_${Date.now()}`,
+      action: 'APPROVE_WITHDRAWAL',
+      adminId: 'approver',
+      adminName: reviewerName,
+      targetType: 'transaction',
+      targetId: txId,
+      reason: `Approved & sent payout of ${tx.cfaAmount.toLocaleString()} CFA to ${tx.momoNumber || tx.providerReference} (${tx.momoAccountName || 'Account'})`,
+      createdAt: new Date().toISOString()
+    });
+
+    this.addNotification({
+      id: `notif_wth_succ_${Date.now()}`,
+      userId: tx.userId,
+      title: '✅ MoMo Withdrawal Sent & Approved!',
+      message: `Your withdrawal of ${tx.cfaAmount.toLocaleString()} CFA has been processed and sent to your ${tx.provider === 'ORANGE_MONEY' ? 'Orange Money' : 'MTN MoMo'} account (${tx.momoNumber} - ${tx.momoAccountName}).`,
+      type: 'withdrawal_status',
+      relatedId: tx.id,
+      read: false,
+      createdAt: new Date().toISOString()
+    });
+
+    return { success: true, message: `Successfully approved withdrawal of ${tx.cfaAmount.toLocaleString()} CFA!` };
+  }
+
+  // Reject withdrawal and release sparks back
+  rejectWithdrawal(txId: string, reviewerName: string, reason?: string): { success: boolean; message: string } {
+    const txs = this.getTransactions();
+    const tx = txs.find(t => t.id === txId);
+    if (!tx || tx.transactionType !== 'WITHDRAWAL' || tx.status !== 'PENDING') {
+      return { success: false, message: 'Transaction not found or already processed.' };
+    }
+
+    tx.status = 'REJECTED';
+    tx.reviewedBy = reviewerName;
+    tx.reviewedAt = new Date().toISOString();
+    tx.adminRejectionReason = reason || 'Name does not match MoMo account or incorrect number.';
+    this.setTransactions(txs);
+
+    this.addAuditLog({
+      id: `log_wth_rej_${Date.now()}`,
+      action: 'REJECT_WITHDRAWAL',
+      adminId: 'approver',
+      adminName: reviewerName,
+      targetType: 'transaction',
+      targetId: txId,
+      reason: `Rejected withdrawal ${txId}: ${tx.adminRejectionReason}. Sparks released back to available balance.`,
+      createdAt: new Date().toISOString()
+    });
+
+    this.addNotification({
+      id: `notif_wth_rej_${Date.now()}`,
+      userId: tx.userId,
+      title: '❌ Withdrawal Request Rejected',
+      message: `Your withdrawal of ${tx.sparks} Sparks was rejected. Reason: ${tx.adminRejectionReason}. Your ${tx.sparks} Sparks remain intact in your wallet.`,
+      type: 'withdrawal_status',
+      relatedId: tx.id,
+      read: false,
+      createdAt: new Date().toISOString()
+    });
+
+    return { success: true, message: 'Withdrawal rejected and Sparks returned to available balance.' };
+  }
+}
+
+// Play audio notification chime using Web Audio API
+export function playChimeSound(): void {
+  try {
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const now = ctx.currentTime;
+    
+    // First tone
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(587.33, now); // D5
+    gain1.gain.setValueAtTime(0.18, now);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.25);
+
+    // Second chime tone
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(880, now + 0.12); // A5
+    gain2.gain.setValueAtTime(0.22, now + 0.12);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(now + 0.12);
+    osc2.stop(now + 0.45);
+  } catch (e) {
+    // Audio context may require user interaction
+  }
+}
+
+// Fire system browser desktop notification (works even if user is on another tab/window)
+export function triggerBrowserNotification(title: string, body: string): void {
+  try {
+    playChimeSound();
+  } catch (e) {}
+
+  if (typeof window === 'undefined' || !('Notification' in window)) {
+    return;
+  }
+
+  if (Notification.permission === 'granted') {
+    try {
+      new Notification(title, {
+        body,
+        icon: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+        tag: `judmispark-${Date.now()}`
+      });
+    } catch (e) {
+      console.warn('Browser notification error:', e);
+    }
+  } else if (Notification.permission !== 'denied') {
+    Notification.requestPermission().then(perm => {
+      if (perm === 'granted') {
+        try {
+          new Notification(title, {
+            body,
+            icon: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+            tag: `judmispark-${Date.now()}`
+          });
+        } catch (e) {}
+      }
+    });
   }
 }
 

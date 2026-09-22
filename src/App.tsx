@@ -19,6 +19,8 @@ import { VoiceReportModal } from './components/VoiceReportModal';
 import { GiftSparkModal } from './components/GiftSparkModal';
 import { ProfileDetailModal } from './components/ProfileDetailModal';
 import { NotificationsModal } from './components/NotificationsModal';
+import { ReferralPromoModal } from './components/ReferralPromoModal';
+import { LandingHomeView } from './components/LandingHomeView';
 import { 
   Sparkles, 
   Flame, 
@@ -31,17 +33,20 @@ import {
   Bell, 
   ShieldAlert, 
   Users, 
-  Lock
+  Lock,
+  Crown
 } from 'lucide-react';
 
 type ActiveTab = 'discover' | 'matches' | 'linkup' | 'talk' | 'events' | 'wallet' | 'profile' | 'admin';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<UserProfile>(storage.getCurrentUser());
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => storage.isUserLoggedIn());
   const [activeTab, setActiveTab] = useState<ActiveTab>('discover');
   
   // Modals state
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [isReferralPromoOpen, setIsReferralPromoOpen] = useState(false);
   const [activeChat, setActiveChat] = useState<{
     conversation: MatchConversation;
     otherUser: UserProfile;
@@ -81,10 +86,28 @@ export default function App() {
     const unsubscribe = storage.onNotificationAdded(() => {
       refreshData();
     });
+
+    // Check if user is logging in for the first time or has not seen the referral promo popup yet
+    const user = storage.getCurrentUser();
+    if (!storage.hasUserSeenReferralPromo(user.id)) {
+      const timer = setTimeout(() => {
+        setIsReferralPromoOpen(true);
+      }, 700);
+      return () => {
+        clearTimeout(timer);
+        unsubscribe();
+      };
+    }
+
     return () => {
       unsubscribe();
     };
   }, []);
+
+  const handleCloseReferralPromo = () => {
+    storage.markUserSeenReferralPromo(currentUser.id);
+    setIsReferralPromoOpen(false);
+  };
 
   const handleStartChatWithUser = (targetUserId: string, initialMessage?: string) => {
     const allUsers = storage.getUsers();
@@ -204,6 +227,16 @@ export default function App() {
         break;
       }
 
+      case 'admin_alert':
+      case 'wallet_topup': {
+        if (storage.canUserApproveWallets(currentUser)) {
+          setActiveTab('admin');
+        } else {
+          setActiveTab('wallet');
+        }
+        break;
+      }
+
       default: {
         if (notif.relatedId?.startsWith('evt_')) {
           setEventsInitialEventId(notif.relatedId);
@@ -222,6 +255,39 @@ export default function App() {
       }
     }
   };
+
+  // If user is logged out, show the public Home / Landing Page
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
+        <LandingHomeView
+          onOpenRegister={() => setIsRegistrationOpen(true)}
+          onLoginSuccess={(user) => {
+            setCurrentUser(user);
+            setIsLoggedIn(true);
+            storage.setUserLoggedIn(true);
+            refreshData();
+            setActiveTab('discover');
+          }}
+        />
+
+        {/* Registration Modal */}
+        <RegistrationModal
+          isOpen={isRegistrationOpen}
+          onClose={() => setIsRegistrationOpen(false)}
+          onRegistered={(user) => {
+            setCurrentUser(user);
+            setIsLoggedIn(true);
+            storage.setUserLoggedIn(true);
+            setIsRegistrationOpen(false);
+            refreshData();
+            setIsReferralPromoOpen(true);
+            setActiveTab('discover');
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
@@ -253,6 +319,23 @@ export default function App() {
 
           {/* Right Header Actions */}
           <div className="flex items-center gap-2">
+            {/* Admin / Wallet Approver Hub button */}
+            {storage.canUserApproveWallets(currentUser) && (
+              <button
+                type="button"
+                onClick={() => setActiveTab('admin')}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold transition cursor-pointer ${
+                  activeTab === 'admin'
+                    ? 'bg-amber-500 text-neutral-950 border-amber-400 shadow-md shadow-amber-500/20'
+                    : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border-amber-500/30'
+                }`}
+                title="Admin Dashboard & Wallet Approvals"
+              >
+                <ShieldAlert size={14} />
+                <span className="hidden sm:inline">Admin Hub</span>
+              </button>
+            )}
+
             {/* Notifications Bell */}
             <button
               type="button"
@@ -334,9 +417,13 @@ export default function App() {
           <ProfileView
             currentUser={currentUser}
             onRefreshUser={refreshData}
-            onLogout={() => setIsRegistrationOpen(true)}
+            onLogout={() => {
+              storage.logoutUser();
+              setIsLoggedIn(false);
+            }}
             onNavigateToWallet={() => setActiveTab('wallet')}
             onNavigateToAdmin={() => setActiveTab('admin')}
+            onOpenReferralPromo={() => setIsReferralPromoOpen(true)}
           />
         )}
 
@@ -460,6 +547,7 @@ export default function App() {
           setCurrentUser(user);
           setIsRegistrationOpen(false);
           refreshData();
+          setIsReferralPromoOpen(true);
         }}
       />
 
@@ -524,6 +612,17 @@ export default function App() {
           onSelectNotification={handleNotificationClick}
         />
       )}
+
+      {/* 7. First-Time Login Referral & Free Premium VIP Modal */}
+      <ReferralPromoModal
+        isOpen={isReferralPromoOpen}
+        currentUser={currentUser}
+        onClose={handleCloseReferralPromo}
+        onNavigateToProfile={() => {
+          handleCloseReferralPromo();
+          setActiveTab('profile');
+        }}
+      />
     </div>
   );
 }

@@ -218,7 +218,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
   };
 
   const getShareUrl = (evt: EventItem) => {
-    return `https://judmispark.cm/event/${evt.id.slice(-6)}`;
+    return `https://judmispark.com/event/${evt.id.slice(-6)}`;
   };
 
   const handleCopyLink = (evt: EventItem) => {

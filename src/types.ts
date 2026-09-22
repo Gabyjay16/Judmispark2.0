@@ -1,4 +1,13 @@
-export type TownLocation = 'Bamenda' | 'Douala' | 'Yaoundé' | 'Buea' | 'Limbe' | 'Bafoussam' | 'Garoua' | 'Kumba';
+export type TownLocation = 
+  | 'Bamenda' 
+  | 'Douala' 
+  | 'Yaoundé' 
+  | 'Buea' 
+  | 'Limbe' 
+  | 'Bafoussam' 
+  | 'Garoua' 
+  | 'Kumba'
+  | string;
 
 export type RelationshipIntention = 
   | 'Relationship' 
@@ -25,11 +34,17 @@ export interface UserProfile {
   displayName: string;
   email?: string;
   phoneNumber: string;
+  pin?: string;
+  password?: string;
   role: UserRole;
   dateOfBirth: string;
   age: number;
   gender: 'male' | 'female' | 'non-binary' | 'other';
   genderPreference: 'everyone' | 'women' | 'men';
+  nationality?: string; // e.g. Cameroon, Nigeria, France, etc.
+  countryCode?: string; // e.g. CM, NG, FR, etc.
+  currency?: string; // e.g. XAF, NGN, EUR, USD
+  preferredLanguage?: 'en' | 'fr';
   town: TownLocation;
   neighborhood?: string;
   profilePicture: string;
@@ -37,7 +52,8 @@ export interface UserProfile {
   videos?: ProfileVideo[]; // Up to 2 videos of max 1 minute (60s) long
   bio: string;
   interests: string[];
-  relationshipIntention: RelationshipIntention;
+  relationshipIntention: RelationshipIntention | string;
+  relationshipIntentions?: RelationshipIntention[];
   isVerified: boolean;
   status: 'active' | 'suspended' | 'banned';
   // Mandatory permanent registration voice recording
@@ -48,7 +64,22 @@ export interface UserProfile {
   isPremium: boolean;
   referralCode: string;
   walletId: string; // e.g. SPK-827491
+  canApproveWallets?: boolean; // Granted by Admin to view and approve wallet top-ups and withdrawals
   createdAt: string;
+}
+
+export interface PaymentInfoConfig {
+  mtnMomoNumber: string;
+  mtnMomoName: string;
+  mtnMomoAccountName?: string;
+  orangeMoneyNumber: string;
+  orangeMoneyName: string;
+  orangeMoneyAccountName?: string;
+  instructionsEn: string;
+  instructionsFr?: string;
+  instructions?: string;
+  updatedAt?: string;
+  updatedBy?: string;
 }
 
 export interface Advertisement {
@@ -221,6 +252,12 @@ export interface WalletTransaction {
   reference: string;
   provider?: 'MTN_MOMO' | 'ORANGE_MONEY' | 'INTERNAL';
   providerReference?: string;
+  screenshotUrl?: string; // Proof of payment screenshot uploaded by user
+  momoNumber?: string;
+  momoAccountName?: string;
+  adminRejectionReason?: string;
+  reviewedBy?: string;
+  reviewedAt?: string;
   status: 'COMPLETED' | 'PENDING' | 'FAILED' | 'REJECTED';
   note?: string;
   createdAt: string;
@@ -256,10 +293,12 @@ export interface ModerationReport {
     | 'Offensive content' 
     | 'Other';
   reason: string;
+  details?: string;
   additionalComments?: string;
   conversationId?: string;
   // Specific voice comparison evidence for Voice Identity reports
   registrationVoiceUrl?: string;
+  registrationVoiceDuration?: number;
   conversationVoiceUrl?: string;
   status: 'pending' | 'reviewed' | 'resolved';
   outcome?: 'No violation' | 'Warning' | 'Temporary restriction' | 'Voice verification required' | 'Account suspension' | 'Account ban';
@@ -296,6 +335,8 @@ export interface InAppNotification {
     | 'spark_received' 
     | 'spark_gift' 
     | 'withdrawal_status' 
+    | 'wallet_topup'
+    | 'admin_alert'
     | 'premium_unlocked' 
     | 'system';
   relatedId?: string;

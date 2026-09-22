@@ -6,6 +6,8 @@ import {
   ProfileVideo
 } from '../types';
 import { storage } from '../utils/storage';
+import { COUNTRIES, getCountryByName } from '../utils/countries';
+import { getStoredLanguage, setStoredLanguage, SupportedLanguage } from '../utils/i18n';
 import { AudioPlayer } from './AudioPlayer';
 import { MediaGallery } from './MediaGallery';
 import { 
@@ -34,7 +36,9 @@ import {
   ExternalLink,
   AlertCircle,
   Camera,
-  Video as VideoIcon
+  Video as VideoIcon,
+  Languages,
+  Globe
 } from 'lucide-react';
 import { notificationService, NotificationSettings } from '../utils/notificationService';
 
@@ -44,6 +48,7 @@ interface ProfileViewProps {
   onLogout: () => void;
   onNavigateToWallet: () => void;
   onNavigateToAdmin?: () => void;
+  onOpenReferralPromo?: () => void;
 }
 
 const CAMEROON_TOWNS: TownLocation[] = [
@@ -71,17 +76,66 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   onRefreshUser,
   onLogout,
   onNavigateToWallet,
-  onNavigateToAdmin
+  onNavigateToAdmin,
+  onOpenReferralPromo
 }) => {
+  const [currentLang, setCurrentLang] = useState<SupportedLanguage>(() => {
+    return currentUser.preferredLanguage || getStoredLanguage();
+  });
   const [isEditing, setIsEditing] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
   const [editForm, setEditForm] = useState({
     displayName: currentUser.displayName,
+    nationality: currentUser.nationality || 'Cameroon',
     town: currentUser.town,
+    customTown: '',
     neighborhood: currentUser.neighborhood || '',
     bio: currentUser.bio,
-    relationshipIntention: currentUser.relationshipIntention
+    relationshipIntention: currentUser.relationshipIntention,
+    relationshipIntentions: (currentUser.relationshipIntentions && currentUser.relationshipIntentions.length > 0)
+      ? currentUser.relationshipIntentions
+      : (typeof currentUser.relationshipIntention === 'string' 
+          ? (currentUser.relationshipIntention.includes(' & ') ? currentUser.relationshipIntention.split(' & ') : [currentUser.relationshipIntention])
+          : [currentUser.relationshipIntention]) as RelationshipIntention[]
   });
+
+  const handleIntentionToggle = (intent: RelationshipIntention) => {
+    const current = editForm.relationshipIntentions;
+    if (current.includes(intent)) {
+      if (current.length > 1) {
+        setEditForm({
+          ...editForm,
+          relationshipIntentions: current.filter(i => i !== intent)
+        });
+      }
+    } else {
+      if (current.length < 2) {
+        setEditForm({
+          ...editForm,
+          relationshipIntentions: [...current, intent]
+        });
+      } else {
+        setEditForm({
+          ...editForm,
+          relationshipIntentions: [current[0], intent]
+        });
+      }
+    }
+  };
+
+  const selectedCountry = getCountryByName(currentUser.nationality || 'Cameroon');
+  const editCountry = getCountryByName(editForm.nationality);
+
+  const handleLanguageChange = (lang: SupportedLanguage) => {
+    setCurrentLang(lang);
+    setStoredLanguage(lang);
+    const updated: UserProfile = {
+      ...currentUser,
+      preferredLanguage: lang
+    };
+    storage.updateUser(updated);
+    onRefreshUser();
+  };
 
   const referrals = storage.getUserReferrals(currentUser.id);
   const balance = storage.calculateUserBalance(currentUser.id);
@@ -123,20 +177,28 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   };
 
   const handleCopyReferral = () => {
-    navigator.clipboard.writeText(`https://judmispark.cm/join?ref=${currentUser.referralCode}`);
+    navigator.clipboard.writeText(`https://judmispark.com/join?ref=${currentUser.referralCode}`);
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
   };
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
+    const finalTown = editForm.town === 'custom' ? (editForm.customTown.trim() || editCountry.towns[0] || 'Bamenda') : editForm.town;
+    const finalIntentions = editForm.relationshipIntentions.length > 0 
+      ? editForm.relationshipIntentions 
+      : (['Relationship'] as RelationshipIntention[]);
     const updated = {
       ...currentUser,
       displayName: editForm.displayName.trim() || currentUser.displayName,
-      town: editForm.town,
+      nationality: editForm.nationality,
+      countryCode: editCountry.code,
+      currency: editCountry.currency,
+      town: finalTown,
       neighborhood: editForm.neighborhood.trim() || undefined,
       bio: editForm.bio.trim() || currentUser.bio,
-      relationshipIntention: editForm.relationshipIntention
+      relationshipIntention: finalIntentions.join(' & '),
+      relationshipIntentions: finalIntentions
     };
 
     storage.updateUser(updated);
@@ -158,7 +220,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
 
   const handleUpgradePremium = () => {
     if (balance < 10) {
-      alert('You need at least 10 Sparks (5,000 CFA) in your wallet to activate 1 month of JudmiSpark Premium. Please deposit via Mobile Money first.');
+      alert(currentLang === 'fr' 
+        ? 'Vous avez besoin d\'au moins 10 Sparks (5 000 FCFA) pour activer 1 mois de JudmiSpark Premium VIP.' 
+        : 'You need at least 10 Sparks (5,000 CFA) in your wallet to activate 1 month of JudmiSpark Premium. Please deposit via Mobile Money first.');
       return;
     }
 
@@ -180,26 +244,29 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
     const updated = { ...currentUser, isPremium: true };
     storage.updateUser(updated);
     onRefreshUser();
-    alert('Congratulations! JudmiSpark Premium is now active on your account.');
+    alert(currentLang === 'fr' 
+      ? 'Félicitations ! JudmiSpark Premium VIP est maintenant activé sur votre compte.' 
+      : 'Congratulations! JudmiSpark Premium is now active on your account.');
   };
 
   return (
-    <div id="profile-page-view" className="max-w-md mx-auto w-full px-4 py-3 space-y-5 pb-28">
+    <div id="profile-page-view" className="max-w-md mx-auto w-full px-4 py-3 space-y-4 pb-28">
       {/* Top Header Profile Card */}
       <div className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 text-center relative overflow-hidden shadow-2xl">
         <div className="absolute top-4 right-4 flex items-center gap-1.5">
           <button
             type="button"
             onClick={() => setIsEditing(!isEditing)}
-            className="p-2 rounded-xl bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 text-xs transition"
+            className="p-2 rounded-xl bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700 text-xs transition cursor-pointer"
+            title={currentLang === 'fr' ? 'Modifier le profil' : 'Edit Profile'}
           >
             <Edit3 size={15} />
           </button>
           <button
             type="button"
             onClick={onLogout}
-            title="Log Out"
-            className="p-2 rounded-xl bg-neutral-800 text-neutral-400 hover:text-rose-400 border border-neutral-700 text-xs transition"
+            title={currentLang === 'fr' ? 'Se déconnecter' : 'Log Out'}
+            className="p-2 rounded-xl bg-neutral-800 text-neutral-400 hover:text-rose-400 border border-neutral-700 text-xs transition cursor-pointer"
           >
             <LogOut size={15} />
           </button>
@@ -230,9 +297,12 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           )}
         </h2>
 
-        <div className="flex items-center justify-center gap-1 text-xs text-rose-400 font-medium mt-1">
+        {/* Location & Nationality with Flag */}
+        <div className="flex items-center justify-center gap-1.5 text-xs text-rose-400 font-medium mt-1">
           <MapPin size={13} />
           <span>{currentUser.town}</span>
+          <span className="text-neutral-500">•</span>
+          <span className="text-neutral-300 font-semibold">{selectedCountry.flag} {currentUser.nationality || 'Cameroon'}</span>
           {currentUser.neighborhood && (
             <span className="text-neutral-400">• {currentUser.neighborhood}</span>
           )}
@@ -245,7 +315,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         )}
 
         <div className="inline-block mt-2 bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[11px] font-semibold px-3 py-0.5 rounded-full">
-          Intent: {currentUser.relationshipIntention}
+          {currentLang === 'fr' ? 'Intention : ' : 'Intent: '} {currentUser.relationshipIntention}
         </div>
 
         {/* Media Counters Badge */}
@@ -271,6 +341,50 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
               {i}
             </span>
           ))}
+        </div>
+      </div>
+
+      {/* LANGUAGE SWITCHER CARD (English <-> French) */}
+      <div className="bg-neutral-900 border border-neutral-800 rounded-3xl p-4 shadow-xl flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center">
+            <Languages size={16} />
+          </div>
+          <div>
+            <div className="text-xs font-bold text-white">
+              {currentLang === 'fr' ? 'Langue de l\'application' : 'App Language'}
+            </div>
+            <div className="text-[10px] text-neutral-400">
+              {currentLang === 'fr' ? 'Français activé' : 'English active'}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1.5 bg-neutral-950 p-1 rounded-2xl border border-neutral-800">
+          <button
+            type="button"
+            onClick={() => handleLanguageChange('en')}
+            className={`py-1.5 px-3 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+              currentLang === 'en'
+                ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30'
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            <span>🇬🇧</span>
+            <span>English</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleLanguageChange('fr')}
+            className={`py-1.5 px-3 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+              currentLang === 'fr'
+                ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30'
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            <span>🇫🇷</span>
+            <span>Français</span>
+          </button>
         </div>
       </div>
 
@@ -336,7 +450,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
 
           <div>
             <label className="block text-xs font-semibold text-neutral-300 mb-1">
-              Display Name
+              {currentLang === 'fr' ? 'Pseudo public' : 'Display Name'}
             </label>
             <input
               type="text"
@@ -346,25 +460,55 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             />
           </div>
 
+          {/* Nationality in Edit Form */}
+          <div>
+            <label className="block text-xs font-semibold text-neutral-300 mb-1">
+              {currentLang === 'fr' ? 'Nationalité / Pays' : 'Nationality / Country'}
+            </label>
+            <div className="relative">
+              <select
+                value={editForm.nationality}
+                onChange={(e) => {
+                  const newCountry = getCountryByName(e.target.value);
+                  setEditForm({
+                    ...editForm,
+                    nationality: newCountry.name,
+                    town: newCountry.towns[0] || 'Bamenda',
+                    customTown: ''
+                  });
+                }}
+                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 pr-8 text-xs text-white focus:outline-none focus:border-rose-500 appearance-none cursor-pointer"
+              >
+                {COUNTRIES.map(c => (
+                  <option key={c.code} value={c.name}>
+                    {c.flag} {c.name} ({c.dialCode})
+                  </option>
+                ))}
+              </select>
+              <span className="absolute right-3 top-2.5 text-xs text-neutral-500 pointer-events-none">▼</span>
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="block text-xs font-semibold text-neutral-300 mb-1">
-                Town / City
+                {currentLang === 'fr' ? 'Ville / Localité' : 'Town / City'}
               </label>
               <select
                 value={editForm.town}
                 onChange={(e) => setEditForm({ ...editForm, town: e.target.value as TownLocation })}
-                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500 cursor-pointer"
               >
-                {CAMEROON_TOWNS.map(t => (
+                {editCountry.towns.map(t => (
                   <option key={t} value={t}>{t}</option>
                 ))}
+                <option value="custom">✏️ {currentLang === 'fr' ? 'Autre ville' : 'Other City'}</option>
               </select>
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-neutral-300 mb-1">
-                Neighborhood
+                {currentLang === 'fr' ? 'Quartier' : 'Neighborhood'}
               </label>
               <input
                 type="text"
@@ -376,19 +520,66 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             </div>
           </div>
 
+          {editForm.town === 'custom' && (
+            <div>
+              <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                {currentLang === 'fr' ? 'Nom de votre ville' : 'Custom Town Name'}
+              </label>
+              <input
+                type="text"
+                value={editForm.customTown}
+                onChange={(e) => setEditForm({ ...editForm, customTown: e.target.value })}
+                placeholder="e.g. Garoua-Boulaï, Kribi, etc."
+                className="w-full bg-neutral-950 border border-rose-500/50 rounded-xl p-2.5 text-xs text-white focus:outline-none"
+              />
+            </div>
+          )}
+
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1">
-              Relationship Intention
-            </label>
-            <select
-              value={editForm.relationshipIntention}
-              onChange={(e) => setEditForm({ ...editForm, relationshipIntention: e.target.value as RelationshipIntention })}
-              className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
-            >
-              {RELATIONSHIP_INTENTIONS.map(intent => (
-                <option key={intent} value={intent}>{intent}</option>
-              ))}
-            </select>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-semibold text-neutral-300">
+                {currentLang === 'fr' ? 'Intentions relationnelles' : 'Relationship Intentions'}
+              </label>
+              <span className="text-[10px] font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20">
+                {currentLang === 'fr' 
+                  ? `Jusqu'à 2 (${editForm.relationshipIntentions.length}/2)` 
+                  : `Up to 2 (${editForm.relationshipIntentions.length}/2)`}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: 'Relationship', icon: '❤️', labelEn: 'Relationship', labelFr: 'Relation' },
+                { value: 'Marriage', icon: '💍', labelEn: 'Marriage', labelFr: 'Mariage' },
+                { value: 'Friendship', icon: '🤝', labelEn: 'Friendship', labelFr: 'Amitié' },
+                { value: 'Casual social connection', icon: '☕', labelEn: 'Casual Hangout', labelFr: 'Sorties & Détente' },
+                { value: 'Networking', icon: '💼', labelEn: 'Networking', labelFr: 'Réseautage' },
+                { value: 'Just meeting people', icon: '✨', labelEn: 'Meeting People', labelFr: 'Rencontres' }
+              ].map(opt => {
+                const isSelected = editForm.relationshipIntentions.includes(opt.value as RelationshipIntention);
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => handleIntentionToggle(opt.value as RelationshipIntention)}
+                    className={`p-2 rounded-xl border text-left text-xs transition cursor-pointer flex items-center justify-between gap-1.5 ${
+                      isSelected
+                        ? 'bg-rose-500/15 border-rose-500 text-white font-bold ring-1 ring-rose-500/30'
+                        : 'bg-neutral-950 border-neutral-800 text-neutral-300 hover:border-neutral-700'
+                    }`}
+                  >
+                    <span className="flex items-center gap-1.5 truncate">
+                      <span>{opt.icon}</span>
+                      <span className="truncate">{currentLang === 'fr' ? opt.labelFr : opt.labelEn}</span>
+                    </span>
+                    <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] shrink-0 border ${
+                      isSelected ? 'bg-rose-500 border-rose-500 text-white' : 'border-neutral-700'
+                    }`}>
+                      {isSelected ? '✓' : ''}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div>
@@ -405,9 +596,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
 
           <button
             type="submit"
-            className="w-full py-2.5 rounded-xl bg-rose-500 text-white font-bold text-xs shadow-md"
+            className="w-full py-2.5 rounded-xl bg-rose-500 text-white font-bold text-xs shadow-md cursor-pointer hover:bg-rose-600 transition"
           >
-            Save Profile Changes
+            {currentLang === 'fr' ? 'Enregistrer les modifications' : 'Save Profile Changes'}
           </button>
         </form>
       )}
@@ -755,7 +946,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           </button>
         </div>
 
-        <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3 text-[11px] text-neutral-300 space-y-1">
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3 text-[11px] text-neutral-300 space-y-2">
           <div className="flex items-center justify-between font-semibold text-amber-300">
             <span>VIP Reward Status:</span>
             <span>{currentUser.isPremium ? '👑 Active Premium VIP' : 'Invite 1 Friend to Unlock'}</span>
@@ -763,6 +954,81 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           <p className="text-[10px] text-neutral-400">
             When another user uses your referral code/link and completes their voice verification, your account automatically unlocks unlimited Discover swipes, priority matches, and golden VIP status.
           </p>
+          {onOpenReferralPromo && (
+            <button
+              type="button"
+              onClick={onOpenReferralPromo}
+              className="w-full py-2 px-3 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer mt-1"
+            >
+              <Crown size={14} className="text-amber-400" />
+              <span>View All Premium Services Included</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ADMIN & WALLET APPROVER DASHBOARD (Visible to Admin or Authorized Approvers) */}
+      {(currentUser.role === 'admin' || currentUser.email === 'gabyjay16@gmail.com' || currentUser.canApproveWallets) && onNavigateToAdmin && (
+        <div className="bg-gradient-to-r from-neutral-900 to-amber-950/40 border border-amber-500/30 rounded-3xl p-5 space-y-3 shadow-xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold shrink-0">
+                <ShieldAlert size={16} />
+              </div>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <h3 className="text-sm font-bold text-white">
+                    {currentUser.role === 'admin' ? 'Admin & Management Hub' : 'Wallet Approver Console'}
+                  </h3>
+                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                    {currentUser.role === 'admin' ? 'Super Admin' : 'Approver'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-neutral-400">
+                  Manage MoMo payment info, review top-up screenshots, approve withdrawals & permissions.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={onNavigateToAdmin}
+            className="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-neutral-950 text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition cursor-pointer"
+          >
+            <ShieldAlert size={15} />
+            <span>Open Admin Dashboard & Payment Approvals</span>
+          </button>
+        </div>
+      )}
+
+      {/* ACCOUNT & PERMANENT SESSION */}
+      <div className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 space-y-3 shadow-xl">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-neutral-800 text-neutral-300 flex items-center justify-center font-bold shrink-0">
+            <ShieldCheck size={16} className="text-emerald-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-white">
+              {currentLang === 'fr' ? 'Sécurité & Session Permanente' : 'Account & Permanent Session'}
+            </h3>
+            <p className="text-[11px] text-neutral-400">
+              {currentLang === 'fr' 
+                ? 'Votre session reste active en permanence. Vous ne serez déconnecté qu’en cliquant sur le bouton ci-dessous.' 
+                : 'Your session stays logged in permanently. You will never be logged out unless you click the button below.'}
+            </p>
+          </div>
+        </div>
+
+        <div className="pt-1">
+          <button
+            type="button"
+            onClick={onLogout}
+            className="w-full py-2.5 px-4 rounded-xl bg-neutral-950 hover:bg-rose-500/10 border border-neutral-800 hover:border-rose-500/50 text-neutral-300 hover:text-rose-400 text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer"
+          >
+            <LogOut size={14} />
+            <span>{currentLang === 'fr' ? 'Se déconnecter de ce compte' : 'Log Out of this Account'}</span>
+          </button>
         </div>
       </div>
     </div>
