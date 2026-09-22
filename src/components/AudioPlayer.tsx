@@ -182,22 +182,22 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   return (
     <div 
       id="audio-player-card"
-      className={`rounded-2xl p-3 sm:p-4 border transition-all ${
+      className={`rounded-2xl p-2.5 sm:p-3 border transition-all ${
         isRegistrationVoice 
           ? 'bg-gradient-to-br from-neutral-900 via-rose-950/20 to-neutral-900 border-rose-500/30' 
           : 'bg-neutral-800/80 border-neutral-700/60'
       }`}
     >
-      <div className="flex items-center justify-between gap-2 mb-2">
+      <div className="flex items-center justify-between gap-2 mb-1.5">
         <div className="flex items-center gap-2 text-xs font-semibold tracking-wide">
           {isRegistrationVoice ? (
-            <span className="flex items-center gap-1.5 text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/20">
-              <Volume2 size={12} />
-              Permanent Registration Voice
+            <span className="flex items-center gap-1.5 text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20 text-[10px]">
+              <Volume2 size={11} />
+              Voice Intro (Required)
             </span>
           ) : (
-            <span className="text-neutral-400 flex items-center gap-1.5">
-              <Volume2 size={12} />
+            <span className="text-neutral-400 flex items-center gap-1.5 text-[11px]">
+              <Volume2 size={11} />
               {label || `Voice note from ${userName}`}
             </span>
           )}
@@ -205,28 +205,28 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
         <button
           type="button"
           onClick={cycleSpeed}
-          className="text-[11px] font-bold text-neutral-400 hover:text-neutral-200 bg-neutral-800 px-2 py-0.5 rounded-md border border-neutral-700 transition"
+          className="text-[10px] font-bold text-neutral-400 hover:text-neutral-200 bg-neutral-800 px-1.5 py-0.5 rounded border border-neutral-700 transition"
         >
           {playbackRate}x
         </button>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5">
         <button
           id="audio-player-toggle-btn"
           type="button"
           onClick={handlePlayPause}
-          className="w-11 h-11 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 text-white flex items-center justify-center shadow-lg shadow-rose-500/25 hover:scale-105 active:scale-95 transition shrink-0"
+          className="w-9 h-9 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 text-white flex items-center justify-center shadow-lg shadow-rose-500/25 hover:scale-105 active:scale-95 transition shrink-0"
         >
           {isPlaying ? (
-            <Pause size={18} className="fill-current" />
+            <Pause size={14} className="fill-current" />
           ) : (
-            <Play size={18} className="fill-current ml-0.5" />
+            <Play size={14} className="fill-current ml-0.5" />
           )}
         </button>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-1 h-7 px-1 mb-1">
+          <div className="flex items-center justify-between gap-1 h-5 px-1 mb-0.5">
             {bars.map((bar, idx) => {
               const barPercent = (idx / bars.length) * 100;
               const hasPassed = barPercent <= progressPercent;
@@ -236,7 +236,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
                   className="flex-1 flex items-center justify-center"
                 >
                   <div
-                    className={`w-1 rounded-full transition-all duration-150 ${
+                    className={`w-0.75 sm:w-1 rounded-full transition-all duration-150 ${
                       hasPassed
                         ? 'bg-rose-400'
                         : isPlaying
@@ -244,7 +244,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
                         : 'bg-neutral-700'
                     }`}
                     style={{
-                      height: `${Math.max(4, isPlaying && hasPassed ? bar * 24 : bar * 18)}px`
+                      height: `${Math.max(3, isPlaying && hasPassed ? bar * 18 : bar * 14)}px`
                     }}
                   />
                 </div>
@@ -252,7 +252,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
             })}
           </div>
 
-          <div className="flex items-center justify-between text-[11px] font-medium text-neutral-400 px-1">
+          <div className="flex items-center justify-between text-[10px] font-medium text-neutral-400 px-1">
             <span>{formatAudioDuration(currentTime)}</span>
             <span>{formatAudioDuration(effectiveDuration)}</span>
           </div>

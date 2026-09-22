@@ -190,7 +190,7 @@ export const AdminView: React.FC<AdminViewProps> = ({ currentUser, onExitAdmin }
               </span>
             </div>
             <p className="text-xs text-neutral-400">
-              Logged in as {currentUser.displayName} • Secure Administration
+              Admin: <span className="text-rose-400 font-mono font-medium">{currentUser.email || currentUser.displayName}</span> • Secure Moderation & Controls
             </p>
           </div>
         </div>
@@ -198,9 +198,9 @@ export const AdminView: React.FC<AdminViewProps> = ({ currentUser, onExitAdmin }
         <button
           type="button"
           onClick={onExitAdmin}
-          className="py-1.5 px-3.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-semibold border border-neutral-700 transition"
+          className="py-1.5 px-3.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-semibold border border-neutral-700 transition flex items-center gap-1.5"
         >
-          Exit to App
+          <span>← Back to Profile</span>
         </button>
       </div>
 

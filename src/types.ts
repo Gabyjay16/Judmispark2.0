@@ -10,10 +10,20 @@ export type RelationshipIntention =
 
 export type UserRole = 'user' | 'admin';
 
+export interface ProfileVideo {
+  id: string;
+  url: string;
+  duration: number; // in seconds, max 60s
+  title?: string;
+  thumbnail?: string;
+  createdAt: string;
+}
+
 export interface UserProfile {
   id: string;
   fullName: string;
   displayName: string;
+  email?: string;
   phoneNumber: string;
   role: UserRole;
   dateOfBirth: string;
@@ -23,7 +33,8 @@ export interface UserProfile {
   town: TownLocation;
   neighborhood?: string;
   profilePicture: string;
-  photos: string[];
+  photos: string[]; // Up to 7 photos
+  videos?: ProfileVideo[]; // Up to 2 videos of max 1 minute (60s) long
   bio: string;
   interests: string[];
   relationshipIntention: RelationshipIntention;
@@ -76,6 +87,15 @@ export interface MatchConversation {
   unreadCountByUser: Record<string, number>;
   status: 'active' | 'blocked';
   blockedBy?: string;
+  isLikedMatch?: boolean; // Indicates match originated from a single-tap profile like
+}
+
+export interface LikeRecord {
+  id: string;
+  fromUserId: string;
+  toUserId: string;
+  createdAt: string;
+  type: 'single_tap_like' | 'greeting';
 }
 
 export interface ChatMessage {
@@ -98,6 +118,8 @@ export interface LinkUpPost {
   userId: string;
   userDisplayName: string;
   userPhoto: string;
+  userAge?: number;
+  userGender?: 'male' | 'female' | 'non-binary' | 'other';
   isAnonymous: boolean; // Location still visible!
   town: TownLocation;
   availability: 'Today' | 'Tonight' | 'Right Now' | 'This Afternoon';
@@ -109,13 +131,15 @@ export interface LinkUpPost {
   status: 'active' | 'expired';
 }
 
+export type TalkCategory = 'Depressed' | 'Lonely' | 'Need Advice' | 'Depressed / Lonely';
+
 export interface TalkPost {
   id: string;
   userId: string;
   userDisplayName: string;
   userPhoto: string;
   isAnonymous: boolean;
-  category: 'Depressed / Lonely' | 'Need Advice';
+  category: TalkCategory;
   title: string;
   content: string;
   voiceUrl?: string;
@@ -270,6 +294,7 @@ export interface InAppNotification {
     | 'linkup_reply' 
     | 'event_join' 
     | 'spark_received' 
+    | 'spark_gift' 
     | 'withdrawal_status' 
     | 'premium_unlocked' 
     | 'system';

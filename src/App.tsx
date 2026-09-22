@@ -31,7 +31,6 @@ import {
   Bell, 
   ShieldAlert, 
   Users, 
-  ChevronDown,
   Lock
 } from 'lucide-react';
 
@@ -56,7 +55,10 @@ export default function App() {
 
   const [activeGiftSpark, setActiveGiftSpark] = useState<UserProfile | null>(null);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [isUserSwitcherOpen, setIsUserSwitcherOpen] = useState(false);
+
+  // Deep linking state for notifications
+  const [talkInitialPostId, setTalkInitialPostId] = useState<string | null>(null);
+  const [eventsInitialEventId, setEventsInitialEventId] = useState<string | null>(null);
 
   // App metrics
   const [balance, setBalance] = useState<number>(0);
@@ -76,14 +78,13 @@ export default function App() {
 
   useEffect(() => {
     refreshData();
+    const unsubscribe = storage.onNotificationAdded(() => {
+      refreshData();
+    });
+    return () => {
+      unsubscribe();
+    };
   }, []);
-
-  const handleSwitchUser = (selectedUser: UserProfile) => {
-    storage.setCurrentUser(selectedUser);
-    setCurrentUser(selectedUser);
-    setIsUserSwitcherOpen(false);
-    refreshData();
-  };
 
   const handleStartChatWithUser = (targetUserId: string, initialMessage?: string) => {
     const allUsers = storage.getUsers();
@@ -130,7 +131,97 @@ export default function App() {
     setActiveChat({ conversation, otherUser });
   };
 
-  const allAvailableUsers = storage.getUsers();
+  const handleNotificationClick = (notif: InAppNotification) => {
+    // 1. Mark as read & update state
+    storage.markNotificationAsRead(notif.id);
+    refreshData();
+    setIsNotificationsOpen(false);
+
+    // 2. Direct user to exact page and exact place/component
+    switch (notif.type) {
+      case 'match':
+      case 'message':
+      case 'voice_requirement': {
+        const matches = storage.getMatches();
+        const users = storage.getUsers();
+        
+        let conversation = matches.find(m => m.id === notif.relatedId);
+        
+        if (!conversation && notif.relatedId) {
+          conversation = matches.find(m => 
+            m.participants.includes(currentUser.id) && m.participants.includes(notif.relatedId!)
+          );
+        }
+
+        if (!conversation) {
+          conversation = matches.find(m => m.participants.includes(currentUser.id));
+        }
+
+        if (conversation) {
+          const otherId = conversation.participants.find(id => id !== currentUser.id) || conversation.participants[0];
+          const otherUser = users.find(u => u.id === otherId);
+          if (otherUser) {
+            setActiveChat({ conversation, otherUser });
+            return;
+          }
+        }
+
+        if (notif.relatedId && notif.relatedId.startsWith('usr_')) {
+          handleStartChatWithUser(notif.relatedId);
+          return;
+        }
+
+        setActiveTab('matches');
+        break;
+      }
+
+      case 'spark_received':
+      case 'spark_gift':
+      case 'withdrawal_status': {
+        setActiveTab('wallet');
+        break;
+      }
+
+      case 'talk_reply': {
+        setTalkInitialPostId(notif.relatedId || null);
+        setActiveTab('talk');
+        break;
+      }
+
+      case 'event_join': {
+        setEventsInitialEventId(notif.relatedId || null);
+        setActiveTab('events');
+        break;
+      }
+
+      case 'linkup_reply': {
+        setActiveTab('linkup');
+        break;
+      }
+
+      case 'premium_unlocked': {
+        setActiveTab('profile');
+        break;
+      }
+
+      default: {
+        if (notif.relatedId?.startsWith('evt_')) {
+          setEventsInitialEventId(notif.relatedId);
+          setActiveTab('events');
+        } else if (notif.relatedId?.startsWith('talk_')) {
+          setTalkInitialPostId(notif.relatedId);
+          setActiveTab('talk');
+        } else if (notif.relatedId?.startsWith('match_') || notif.relatedId?.startsWith('usr_')) {
+          handleStartChatWithUser(notif.relatedId.replace('match_', ''));
+        } else if (notif.relatedId?.startsWith('tx_') || notif.relatedId?.startsWith('SPK')) {
+          setActiveTab('wallet');
+        } else {
+          setActiveTab('discover');
+        }
+        break;
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
@@ -162,79 +253,6 @@ export default function App() {
 
           {/* Right Header Actions */}
           <div className="flex items-center gap-2">
-            {/* User Switcher Dropdown (Essential for testing multi-user match/chat/voice flows!) */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setIsUserSwitcherOpen(!isUserSwitcherOpen)}
-                className="py-1 px-2 rounded-xl bg-neutral-800/80 hover:bg-neutral-800 border border-neutral-700/60 text-xs flex items-center gap-1.5 transition"
-                title="Switch test account"
-              >
-                <img 
-                  src={currentUser.profilePicture} 
-                  alt={currentUser.displayName} 
-                  className="w-5 h-5 rounded-full object-cover"
-                />
-                <span className="text-xs font-semibold text-neutral-200 hidden sm:inline max-w-[70px] truncate">
-                  {currentUser.displayName}
-                </span>
-                <ChevronDown size={12} className="text-neutral-400" />
-              </button>
-
-              {/* User switcher popup */}
-              {isUserSwitcherOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl p-2 z-50">
-                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider px-2 py-1">
-                    Switch Test Account:
-                  </div>
-                  <div className="space-y-1">
-                    {allAvailableUsers.map(u => (
-                      <button
-                        key={u.id}
-                        type="button"
-                        onClick={() => handleSwitchUser(u)}
-                        className={`w-full p-1.5 rounded-xl flex items-center gap-2 text-left text-xs transition ${
-                          u.id === currentUser.id 
-                            ? 'bg-rose-500/20 text-rose-300 font-bold' 
-                            : 'hover:bg-neutral-800 text-neutral-300'
-                        }`}
-                      >
-                        <img src={u.profilePicture} alt={u.displayName} className="w-6 h-6 rounded-full object-cover" />
-                        <div className="min-w-0 flex-1">
-                          <div className="truncate font-semibold">{u.displayName} ({u.role})</div>
-                          <div className="text-[10px] text-neutral-500 truncate">{u.town}</div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="border-t border-neutral-800 mt-2 pt-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsUserSwitcherOpen(false);
-                        setIsRegistrationOpen(true);
-                      }}
-                      className="w-full py-1.5 px-2 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold text-[11px] text-center transition"
-                    >
-                      + Register New User with Voice
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Spark Wallet Pill */}
-            <button
-              type="button"
-              onClick={() => setActiveTab('wallet')}
-              className="py-1 px-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 text-amber-300 font-bold text-xs flex items-center gap-1 transition"
-              title="Spark Wallet Balance"
-            >
-              <Zap size={13} className="fill-amber-400 text-amber-400" />
-              <span>{balance} SPK</span>
-            </button>
-
             {/* Notifications Bell */}
             <button
               type="button"
@@ -242,36 +260,19 @@ export default function App() {
               className="relative p-2 rounded-xl bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700/60 transition"
               title="Notifications"
             >
-              <Bell size={15} />
+              <Bell size={16} />
               {unreadCount > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center shadow-md">
                   {unreadCount}
                 </span>
               )}
             </button>
-
-            {/* Admin Console Switcher */}
-            {currentUser.role === 'admin' && (
-              <button
-                type="button"
-                onClick={() => setActiveTab(activeTab === 'admin' ? 'discover' : 'admin')}
-                className={`p-2 rounded-xl border text-xs font-bold transition flex items-center gap-1 ${
-                  activeTab === 'admin'
-                    ? 'bg-rose-600 text-white border-rose-500'
-                    : 'bg-neutral-800 text-neutral-300 hover:text-white border-neutral-700'
-                }`}
-                title="Admin Console"
-              >
-                <ShieldAlert size={15} />
-                <span className="hidden sm:inline">Admin</span>
-              </button>
-            )}
           </div>
         </div>
       </header>
 
       {/* MAIN CONTENT ROUTE */}
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col min-h-0">
         {activeTab === 'discover' && (
           <DiscoverView
             currentUser={currentUser}
@@ -304,6 +305,8 @@ export default function App() {
         {activeTab === 'talk' && (
           <TalkView
             currentUser={currentUser}
+            initialPostId={talkInitialPostId}
+            onClearInitialPost={() => setTalkInitialPostId(null)}
             onOpenPrivateTalkChat={(targetUserId, initialMsg) => handleStartChatWithUser(targetUserId, initialMsg)}
             onReportContent={(type, id, name) => {
               alert(`Report received for "${name}". The moderation team will review it.`);
@@ -314,6 +317,8 @@ export default function App() {
         {activeTab === 'events' && (
           <EventsView
             currentUser={currentUser}
+            initialEventId={eventsInitialEventId}
+            onClearInitialEvent={() => setEventsInitialEventId(null)}
           />
         )}
 
@@ -321,6 +326,7 @@ export default function App() {
           <WalletView
             currentUser={currentUser}
             onRefreshUser={refreshData}
+            onBack={() => setActiveTab('profile')}
           />
         )}
 
@@ -329,13 +335,15 @@ export default function App() {
             currentUser={currentUser}
             onRefreshUser={refreshData}
             onLogout={() => setIsRegistrationOpen(true)}
+            onNavigateToWallet={() => setActiveTab('wallet')}
+            onNavigateToAdmin={() => setActiveTab('admin')}
           />
         )}
 
         {activeTab === 'admin' && (
           <AdminView
             currentUser={currentUser}
-            onExitAdmin={() => setActiveTab('discover')}
+            onExitAdmin={() => setActiveTab('profile')}
           />
         )}
       </main>
@@ -413,21 +421,7 @@ export default function App() {
             <span className="text-[10px] mt-0.5">Events</span>
           </button>
 
-          {/* 6. Wallet */}
-          <button
-            type="button"
-            onClick={() => setActiveTab('wallet')}
-            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition ${
-              activeTab === 'wallet' 
-                ? 'text-amber-400 font-bold scale-105' 
-                : 'text-neutral-400 hover:text-neutral-200'
-            }`}
-          >
-            <Wallet size={20} />
-            <span className="text-[10px] mt-0.5">Wallet</span>
-          </button>
-
-          {/* 7. Profile */}
+          {/* 6. Profile */}
           <button
             type="button"
             onClick={() => setActiveTab('profile')}
@@ -451,6 +445,7 @@ export default function App() {
           conversation={activeChat.conversation}
           otherUser={activeChat.otherUser}
           onClose={() => setActiveChat(null)}
+          onOpenProfile={(u) => setActiveProfileDetail(u)}
           onGiftSpark={(recipient) => setActiveGiftSpark(recipient)}
           onReportVoiceIdentity={(conv, other) => setActiveVoiceReport({ reportedUser: other, conversation: conv })}
           onRefresh={refreshData}
@@ -526,6 +521,7 @@ export default function App() {
             storage.clearNotifications(currentUser.id);
             refreshData();
           }}
+          onSelectNotification={handleNotificationClick}
         />
       )}
     </div>

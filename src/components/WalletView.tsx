@@ -8,6 +8,7 @@ import {
   Zap, 
   ArrowUpRight, 
   ArrowDownLeft, 
+  ArrowLeft,
   Send, 
   Download, 
   Smartphone, 
@@ -23,9 +24,10 @@ import {
 interface WalletViewProps {
   currentUser: UserProfile;
   onRefreshUser: () => void;
+  onBack?: () => void;
 }
 
-export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUser }) => {
+export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUser, onBack }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'buy' | 'send' | 'withdraw'>('overview');
   const [copiedWalletId, setCopiedWalletId] = useState(false);
   const [filterType, setFilterType] = useState<string>('all');
@@ -223,6 +225,23 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
 
   return (
     <div id="wallet-page-view" className="max-w-md mx-auto w-full px-4 py-3 space-y-4 pb-24">
+      {/* Back button to Profile if navigated from Profile */}
+      {onBack && (
+        <div className="flex items-center justify-between pb-1">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex items-center gap-1.5 text-xs text-neutral-300 hover:text-white bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 px-3 py-1.5 rounded-xl transition"
+          >
+            <ArrowLeft size={14} />
+            <span>Back to Profile</span>
+          </button>
+          <span className="text-[11px] text-amber-400 font-bold bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+            1 Spark = 500 CFA
+          </span>
+        </div>
+      )}
+
       {/* Spark Balance Card */}
       <div className="bg-gradient-to-br from-amber-500 via-amber-600 to-rose-600 rounded-3xl p-6 text-neutral-950 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10" />

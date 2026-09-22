@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "JudmiSpark",
+  "short_name": "JudmiSpark",
+  "description": "Mobile-first social dating, friendship, and voice-verified platform in Cameroon with background notifications.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "categories": ["social", "lifestyle", "dating"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

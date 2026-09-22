@@ -1,7 +1,8 @@
 import React from 'react';
 import { UserProfile } from '../types';
 import { AudioPlayer } from './AudioPlayer';
-import { MapPin, ShieldCheck, X, Heart, Gift, Flag, Lock } from 'lucide-react';
+import { MediaGallery } from './MediaGallery';
+import { MapPin, ShieldCheck, X, Heart, Gift, Flag, Lock, ArrowLeft } from 'lucide-react';
 
 interface ProfileDetailModalProps {
   user: UserProfile;
@@ -20,18 +21,32 @@ export const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
 }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
-      <div className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-md my-6 shadow-2xl overflow-hidden">
+      <div className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-md my-6 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         {/* Photo header */}
         <div className="relative h-72 w-full bg-neutral-950">
           <img src={user.profilePicture} alt={user.displayName} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-black/40" />
 
+          {/* Prominent Back Button */}
           <button
             type="button"
+            id="profile-back-btn"
             onClick={onClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center border border-white/10"
+            className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-black/70 hover:bg-black/90 backdrop-blur-md text-white flex items-center gap-1.5 border border-white/15 text-xs font-bold shadow-lg transition active:scale-95 group"
           >
-            <X size={18} />
+            <ArrowLeft size={15} className="group-hover:-translate-x-0.5 transition-transform text-rose-400" />
+            <span>Back</span>
+          </button>
+
+          {/* Close Icon Button */}
+          <button
+            type="button"
+            id="profile-close-btn"
+            onClick={onClose}
+            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/70 hover:bg-black/90 backdrop-blur-md text-neutral-300 hover:text-white flex items-center justify-center border border-white/15 transition active:scale-95"
+            title="Close"
+          >
+            <X size={16} />
           </button>
 
           <div className="absolute bottom-4 left-4 right-4">
@@ -91,6 +106,13 @@ export const ProfileDetailModal: React.FC<ProfileDetailModalProps> = ({
               ))}
             </div>
           </div>
+
+          {/* Media Gallery (Photos & Videos) */}
+          <MediaGallery 
+            user={user} 
+            isEditable={false} 
+            onUpdateMedia={() => {}} 
+          />
 
           {/* Actions */}
           <div className="flex items-center gap-2 pt-2 border-t border-neutral-800">

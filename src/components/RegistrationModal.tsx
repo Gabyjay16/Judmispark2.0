@@ -18,7 +18,9 @@ import {
   ArrowLeft, 
   CheckCircle2, 
   Upload,
-  Heart
+  Heart,
+  Crown,
+  Gift
 } from 'lucide-react';
 
 interface RegistrationModalProps {
@@ -73,6 +75,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
     displayName: '',
     phoneNumber: '',
     pin: '',
+    referralCode: '',
     dateOfBirth: '2000-01-01',
     gender: 'female' as 'male' | 'female' | 'non-binary' | 'other',
     genderPreference: 'everyone' as 'everyone' | 'women' | 'men',
@@ -174,6 +177,27 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
 
     // Save user to storage
     storage.setCurrentUser(newUser);
+
+    // Process referral if a referral code was provided (unlocks Premium automatically for the referrer!)
+    if (formData.referralCode && formData.referralCode.trim()) {
+      const refResult = storage.processReferralRegistration(
+        newUser.id,
+        newUser.displayName,
+        formData.referralCode.trim()
+      );
+      if (refResult.referrerFound) {
+        // Notify the new user that their referral link worked
+        storage.addNotification({
+          id: `notif_ref_applied_${Date.now()}`,
+          userId: newUser.id,
+          title: 'Referral Link Verified ✨',
+          message: `You registered using ${refResult.referrerName || 'a friend'}'s referral link! They received automatic JudmiSpark Premium VIP access.`,
+          type: 'system',
+          read: false,
+          createdAt: new Date().toISOString()
+        });
+      }
+    }
 
     // Give welcome notification
     storage.addNotification({
@@ -441,6 +465,30 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                   );
                 })}
               </div>
+            </div>
+
+            {/* Referral Code (Optional) */}
+            <div className="bg-neutral-950/60 p-3.5 rounded-2xl border border-neutral-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
+                  <Gift size={13} className="text-amber-400" />
+                  <span>Referral Code or Link (Optional)</span>
+                </label>
+                <span className="text-[10px] text-amber-400 font-bold flex items-center gap-1">
+                  <Crown size={11} />
+                  <span>Unlocks VIP for friend</span>
+                </span>
+              </div>
+              <input
+                type="text"
+                value={formData.referralCode}
+                onChange={(e) => setFormData({ ...formData, referralCode: e.target.value.toUpperCase() })}
+                placeholder="e.g. BRANDON92 or paste invite link"
+                className="w-full bg-neutral-900 border border-neutral-800 rounded-xl py-2 px-3 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500 font-mono"
+              />
+              <p className="text-[10px] text-neutral-400 leading-tight">
+                Invited by a friend? Enter their code and they will automatically get <strong>JudmiSpark Premium VIP</strong> features when your voice is verified.
+              </p>
             </div>
 
             <div className="pt-2">

@@ -13,7 +13,8 @@ import {
   ModerationReport, 
   AdminAuditLog, 
   InAppNotification,
-  TownLocation
+  TownLocation,
+  LikeRecord
 } from '../types';
 
 const STORAGE_KEYS = {
@@ -34,6 +35,8 @@ const STORAGE_KEYS = {
   NOTIFICATIONS: 'judmispark_notifications',
   SWIPED_PROFILES: 'judmispark_swiped_profiles',
   BLOCKED_USERS: 'judmispark_blocked_users',
+  LIKES: 'judmispark_likes',
+  EVENT_REMINDERS: 'judmispark_event_reminders',
 };
 
 // Initial Registered Current User
@@ -41,8 +44,9 @@ const DEFAULT_USER: UserProfile = {
   id: 'usr_me_brandon',
   fullName: 'Brandon Tabi',
   displayName: 'Brandon',
+  email: 'gabyjay16@gmail.com',
   phoneNumber: '+237 671 234 567',
-  role: 'user',
+  role: 'admin',
   dateOfBirth: '1998-05-14',
   age: 26,
   gender: 'male',
@@ -53,6 +57,15 @@ const DEFAULT_USER: UserProfile = {
   photos: [
     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80'
+  ],
+  videos: [
+    {
+      id: 'vid_brandon_1',
+      url: 'https://assets.mixkit.co/videos/preview/mixkit-young-man-sitting-in-a-park-listening-to-music-40546-small.mp4',
+      duration: 24,
+      title: 'Acoustic evening in Bamenda',
+      createdAt: '2026-09-12T15:00:00Z'
+    }
   ],
   bio: 'Product designer & music lover. Always down for live jazz, tech meetups, and local street food.',
   interests: ['Music', 'Technology', 'Travel', 'Art', 'Coffee', 'Basketball'],
@@ -82,10 +95,20 @@ const INITIAL_USERS: UserProfile[] = [
     genderPreference: 'men',
     town: 'Bamenda',
     neighborhood: 'Up Station',
-    profilePicture: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&auto=format&fit=crop&q=80',
+    profilePicture: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&auto=format&fit=crop&q=80',
     photos: [
-      'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&auto=format&fit=crop&q=80'
+      'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=80'
+    ],
+    videos: [
+      {
+        id: 'vid_sarah_1',
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-young-man-sitting-in-a-park-listening-to-music-40546-small.mp4',
+        duration: 24,
+        title: 'Acoustic evening in Bamenda',
+        createdAt: '2026-09-11T10:00:00Z'
+      }
     ],
     bio: 'Afro-soul vocalist & bookworm. Looking for someone with kind energy who loves weekend drives and deep conversations.',
     interests: ['Music', 'Literature', 'Foodie', 'Travel', 'Acoustic'],
@@ -112,9 +135,20 @@ const INITIAL_USERS: UserProfile[] = [
     genderPreference: 'women',
     town: 'Douala',
     neighborhood: 'Bonapriso',
-    profilePicture: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80',
+    profilePicture: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=80',
     photos: [
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80'
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=800&auto=format&fit=crop&q=80'
+    ],
+    videos: [
+      {
+        id: 'vid_junior_1',
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-man-playing-an-acoustic-guitar-41132-small.mp4',
+        duration: 18,
+        title: 'Tech community in Douala',
+        createdAt: '2026-09-12T12:00:00Z'
+      }
     ],
     bio: 'Software engineer & tech community host in Douala. Always down for good roasted fish at Youpwe.',
     interests: ['Technology', 'Networking', 'Startups', 'Fitness', 'Gaming'],
@@ -141,10 +175,20 @@ const INITIAL_USERS: UserProfile[] = [
     genderPreference: 'men',
     town: 'Yaoundé',
     neighborhood: 'Bastos',
-    profilePicture: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
+    profilePicture: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&auto=format&fit=crop&q=80',
     photos: [
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80'
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&auto=format&fit=crop&q=80'
+    ],
+    videos: [
+      {
+        id: 'vid_chloe_1',
+        url: 'https://assets.mixkit.co/videos/preview/mixkit-young-man-sitting-in-a-park-listening-to-music-40546-small.mp4',
+        duration: 24,
+        title: 'Art gallery & coffee tour',
+        createdAt: '2026-09-13T09:00:00Z'
+      }
     ],
     bio: 'Law student & amateur photographer. Looking to meet cheerful people for art galleries and weekend tea.',
     interests: ['Photography', 'Law', 'Art', 'Fashion', 'Cafes'],
@@ -171,10 +215,12 @@ const INITIAL_USERS: UserProfile[] = [
     genderPreference: 'everyone',
     town: 'Buea',
     neighborhood: 'Molyko',
-    profilePicture: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80',
+    profilePicture: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=800&auto=format&fit=crop&q=80',
     photos: [
-      'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80'
+      'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=80'
     ],
+    videos: [],
     bio: 'Silicon Mountain Buea developer. Hiking Mount Cameroon, chilled vibes and startup conversations.',
     interests: ['Hiking', 'Startups', 'Nature', 'Podcasts', 'Coding'],
     relationshipIntention: 'Networking',
@@ -200,10 +246,12 @@ const INITIAL_USERS: UserProfile[] = [
     genderPreference: 'men',
     town: 'Limbe',
     neighborhood: 'Down Beach',
-    profilePicture: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&auto=format&fit=crop&q=80',
+    profilePicture: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&auto=format&fit=crop&q=80',
     photos: [
-      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&auto=format&fit=crop&q=80'
+      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=80'
     ],
+    videos: [],
     bio: 'Seaside lover, botanical garden explorer, and fashion entrepreneur. Looking for my soulmate.',
     interests: ['Beach', 'Fashion', 'Cooking', 'Travel', 'Entrepreneurship'],
     relationshipIntention: 'Marriage',
@@ -387,6 +435,8 @@ const INITIAL_LINKUPS: LinkUpPost[] = [
     userId: 'usr_sarah_bamenda',
     userDisplayName: 'Anonymous Spark User',
     userPhoto: '',
+    userAge: 24,
+    userGender: 'female',
     isAnonymous: true,
     town: 'Bamenda',
     availability: 'Tonight',
@@ -402,6 +452,8 @@ const INITIAL_LINKUPS: LinkUpPost[] = [
     userId: 'usr_junior_douala',
     userDisplayName: 'Junior',
     userPhoto: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80',
+    userAge: 28,
+    userGender: 'male',
     isAnonymous: false,
     town: 'Douala',
     availability: 'This Afternoon',
@@ -417,6 +469,8 @@ const INITIAL_LINKUPS: LinkUpPost[] = [
     userId: 'usr_kevin_buea',
     userDisplayName: 'Anonymous Spark User',
     userPhoto: '',
+    userAge: 25,
+    userGender: 'male',
     isAnonymous: true,
     town: 'Buea',
     availability: 'Right Now',
@@ -425,6 +479,23 @@ const INITIAL_LINKUPS: LinkUpPost[] = [
     createdAt: new Date(Date.now() - 1 * 3600 * 1000).toISOString(),
     expiresAt: new Date(Date.now() + 23 * 3600 * 1000).toISOString(),
     replyCount: 1,
+    status: 'active'
+  },
+  {
+    id: 'link_4',
+    userId: 'usr_brenda_limbe',
+    userDisplayName: 'Brenda',
+    userPhoto: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&auto=format&fit=crop&q=80',
+    userAge: 23,
+    userGender: 'female',
+    isAnonymous: false,
+    town: 'Limbe',
+    availability: 'Tonight',
+    time: '6:30 PM',
+    message: "Sunset sea breeze by Down Beach! Who wants roasted fish and plantains?",
+    createdAt: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
+    expiresAt: new Date(Date.now() + 22 * 3600 * 1000).toISOString(),
+    replyCount: 4,
     status: 'active'
   }
 ];
@@ -436,12 +507,26 @@ const INITIAL_TALK_POSTS: TalkPost[] = [
     userDisplayName: 'Anonymous Spark User',
     userPhoto: '',
     isAnonymous: true,
-    category: 'Depressed / Lonely',
+    category: 'Lonely',
     title: 'Feeling isolated in a new city after moving for work',
     content: "I recently relocated to Douala for a new job. During working hours everything is okay, but by 7 PM when I get to my apartment, the silence feels overwhelming. I haven't made any real friends yet and don't know where to start.",
     repliesCount: 4,
     createdAt: new Date(Date.now() - 12 * 3600 * 1000).toISOString(),
     likesCount: 18,
+    status: 'active'
+  },
+  {
+    id: 'talk_depressed_1',
+    userId: 'usr_anon_depressed',
+    userDisplayName: 'Anonymous Spark User',
+    userPhoto: '',
+    isAnonymous: true,
+    category: 'Depressed',
+    title: 'Waking up with heavy emotional exhaustion and no motivation',
+    content: "Lately it feels like carrying a heavy backpack all day. Even simple tasks like replying to family messages or cooking feel huge. Just putting this here because holding it in makes it harder.",
+    repliesCount: 7,
+    createdAt: new Date(Date.now() - 6 * 3600 * 1000).toISOString(),
+    likesCount: 29,
     status: 'active'
   },
   {
@@ -610,26 +695,57 @@ const INITIAL_NOTIFICATIONS: InAppNotification[] = [
     type: 'match',
     relatedId: 'match_sarah_brandon',
     read: false,
-    createdAt: '2026-09-19T16:00:00Z'
+    createdAt: '2026-09-21T16:00:00Z'
   },
   {
     id: 'notif_2',
     userId: 'usr_me_brandon',
-    title: 'Voice Verification Reminder',
+    title: 'Voice Verification Required 🎙️',
     message: 'Sarah sent a voice note! Send a voice note back to unlock unlimited chatting.',
     type: 'voice_requirement',
     relatedId: 'match_sarah_brandon',
     read: false,
-    createdAt: '2026-09-20T19:36:00Z'
+    createdAt: '2026-09-22T04:36:00Z'
   },
   {
     id: 'notif_3',
     userId: 'usr_me_brandon',
     title: 'Spark Gift Received ⚡',
-    message: 'You received 2 Sparks (1,000 CFA) from Sarah!',
+    message: 'You received 2 Sparks (1,000 CFA value) from Sarah Nfor!',
     type: 'spark_received',
+    relatedId: 'tx_init_2',
+    read: false,
+    createdAt: '2026-09-22T03:30:00Z'
+  },
+  {
+    id: 'notif_4',
+    userId: 'usr_me_brandon',
+    title: 'New Reply on Talk Forum 💬',
+    message: 'Junior and Chloe replied to "Feeling isolated in a new city after moving for work". Tap to join the conversation.',
+    type: 'talk_reply',
+    relatedId: 'talk_1',
+    read: false,
+    createdAt: '2026-09-22T02:15:00Z'
+  },
+  {
+    id: 'notif_5',
+    userId: 'usr_me_brandon',
+    title: 'Upcoming Event: Friday Night Hangout 🎉',
+    message: 'Junior Ebongue and 3 others are meeting at Bonapriso. Tap to view details and live event chat.',
+    type: 'event_join',
+    relatedId: 'evt_friday_hangout',
+    read: false,
+    createdAt: '2026-09-22T01:00:00Z'
+  },
+  {
+    id: 'notif_6',
+    userId: 'usr_me_brandon',
+    title: 'New Link Up in Bamenda ⚡',
+    message: 'Someone is free tonight for hot tea & acoustic music near Up Station. Tap to connect!',
+    type: 'linkup_reply',
+    relatedId: 'link_1',
     read: true,
-    createdAt: '2026-09-19T18:30:00Z'
+    createdAt: '2026-09-21T18:30:00Z'
   }
 ];
 
@@ -691,6 +807,15 @@ const INITIAL_AUDIT_LOGS: AdminAuditLog[] = [
 ];
 
 class StorageManager {
+  private notifListeners: ((notif: InAppNotification) => void)[] = [];
+
+  public onNotificationAdded(callback: (notif: InAppNotification) => void): () => void {
+    this.notifListeners.push(callback);
+    return () => {
+      this.notifListeners = this.notifListeners.filter(cb => cb !== callback);
+    };
+  }
+
   private getItem<T>(key: string, defaultValue: T): T {
     try {
       const data = localStorage.getItem(key);
@@ -709,7 +834,19 @@ class StorageManager {
   }
 
   getCurrentUser(): UserProfile {
-    return this.getItem(STORAGE_KEYS.CURRENT_USER, DEFAULT_USER);
+    const user = this.getItem<UserProfile>(STORAGE_KEYS.CURRENT_USER, DEFAULT_USER);
+    // Ensure gabyjay16@gmail.com is designated as Admin
+    if (user.id === DEFAULT_USER.id || user.email === 'gabyjay16@gmail.com' || !user.email) {
+      user.email = 'gabyjay16@gmail.com';
+      user.role = 'admin';
+    }
+    if (!Array.isArray(user.photos) || user.photos.length === 0) {
+      user.photos = user.profilePicture ? [user.profilePicture] : DEFAULT_USER.photos;
+    }
+    if (!Array.isArray(user.videos)) {
+      user.videos = DEFAULT_USER.videos || [];
+    }
+    return user;
   }
 
   setCurrentUser(user: UserProfile): void {
@@ -726,7 +863,18 @@ class StorageManager {
   }
 
   getUsers(): UserProfile[] {
-    return this.getItem(STORAGE_KEYS.USERS, INITIAL_USERS);
+    const users = this.getItem<UserProfile[]>(STORAGE_KEYS.USERS, INITIAL_USERS);
+    return users.map(u => {
+      const photos = Array.isArray(u.photos) && u.photos.length > 0 
+        ? u.photos 
+        : (u.profilePicture ? [u.profilePicture] : []);
+      const videos = Array.isArray(u.videos) ? u.videos : [];
+      return {
+        ...u,
+        photos,
+        videos
+      };
+    });
   }
 
   getAds(): Advertisement[] {
@@ -889,6 +1037,13 @@ class StorageManager {
     const list = this.getNotifications();
     list.unshift(notif);
     this.setNotifications(list);
+    this.notifListeners.forEach(cb => {
+      try {
+        cb(notif);
+      } catch (e) {
+        console.warn('Error in notification listener', e);
+      }
+    });
   }
 
   getSwipedIds(): string[] {
@@ -956,6 +1111,12 @@ class StorageManager {
     return this.getNotifications().filter(n => n.userId === userId);
   }
 
+  markNotificationAsRead(notifId: string): void {
+    const all = this.getNotifications();
+    const updated = all.map(n => n.id === notifId ? { ...n, read: true } : n);
+    this.setNotifications(updated);
+  }
+
   clearNotifications(userId: string): void {
     const all = this.getNotifications();
     const remaining = all.filter(n => n.userId !== userId);
@@ -966,10 +1127,159 @@ class StorageManager {
     return this.getReferrals().filter(r => r.referrerId === userId);
   }
 
+  // Activate referral and automatically unlock Premium features for the referrer!
+  processReferralRegistration(newUserId: string, newUserName: string, referralCodeUsed: string): { referrerFound: boolean; referrerName?: string } {
+    if (!referralCodeUsed || !referralCodeUsed.trim()) return { referrerFound: false };
+    const cleanCode = referralCodeUsed.trim().toUpperCase();
+
+    // Find user who owns this referral code
+    const allUsers = this.getUsers();
+    const referrer = allUsers.find(u => u.referralCode && u.referralCode.toUpperCase() === cleanCode && u.id !== newUserId);
+
+    if (!referrer) {
+      return { referrerFound: false };
+    }
+
+    // 1. Record the referral entry
+    const allReferrals = this.getReferrals();
+    const newRefRecord: ReferralRecord = {
+      id: `ref_${Date.now()}`,
+      referrerId: referrer.id,
+      referredUserId: newUserId,
+      referredUserName: newUserName,
+      referralCode: cleanCode,
+      status: 'activated',
+      createdAt: new Date().toISOString(),
+      activatedAt: new Date().toISOString()
+    };
+    allReferrals.unshift(newRefRecord);
+    this.setReferrals(allReferrals);
+
+    // 2. Automatically grant Premium to the referrer!
+    referrer.isPremium = true;
+    const userIdx = allUsers.findIndex(u => u.id === referrer.id);
+    if (userIdx >= 0) {
+      allUsers[userIdx] = referrer;
+      this.setItem(STORAGE_KEYS.USERS, allUsers);
+    }
+
+    // Also update if currentUser is this referrer
+    const curr = this.getCurrentUser();
+    if (curr.id === referrer.id) {
+      curr.isPremium = true;
+      this.setItem(STORAGE_KEYS.CURRENT_USER, curr);
+    }
+
+    // 3. Send congratulatory In-App notification to the referrer about their new Premium VIP status
+    this.addNotification({
+      id: `notif_premium_ref_${Date.now()}`,
+      userId: referrer.id,
+      title: '👑 JudmiSpark Premium Unlocked!',
+      message: `${newUserName} just registered with your referral link! You have automatically been granted JudmiSpark Premium VIP with unlimited swipes and priority matches!`,
+      type: 'premium_unlocked',
+      read: false,
+      createdAt: new Date().toISOString()
+    });
+
+    return { referrerFound: true, referrerName: referrer.displayName };
+  }
+
   addReport(report: ModerationReport): void {
     const all = this.getReports();
     all.unshift(report);
     this.setReports(all);
+  }
+
+  // LIKES MANAGEMENT
+  getLikes(): LikeRecord[] {
+    return this.getItem<LikeRecord[]>(STORAGE_KEYS.LIKES, [
+      // Pre-seed some likes so user can see how incoming likes appear
+      {
+        id: 'like_chloe_me',
+        fromUserId: 'usr_chloe_yaounde',
+        toUserId: 'usr_me_brandon',
+        createdAt: '2026-09-21T08:00:00Z',
+        type: 'single_tap_like'
+      },
+      {
+        id: 'like_sarah_me',
+        fromUserId: 'usr_sarah_bamenda',
+        toUserId: 'usr_me_brandon',
+        createdAt: '2026-09-20T12:30:00Z',
+        type: 'single_tap_like'
+      }
+    ]);
+  }
+
+  setLikes(likes: LikeRecord[]): void {
+    this.setItem(STORAGE_KEYS.LIKES, likes);
+  }
+
+  addLike(fromUserId: string, toUserId: string, type: 'single_tap_like' | 'greeting' = 'single_tap_like'): LikeRecord {
+    const likes = this.getLikes();
+    const existing = likes.find(l => l.fromUserId === fromUserId && l.toUserId === toUserId);
+    if (existing) {
+      existing.createdAt = new Date().toISOString();
+      existing.type = type;
+      this.setLikes(likes);
+      return existing;
+    }
+
+    const newLike: LikeRecord = {
+      id: `like_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      fromUserId,
+      toUserId,
+      createdAt: new Date().toISOString(),
+      type
+    };
+
+    likes.unshift(newLike);
+    this.setLikes(likes);
+    return newLike;
+  }
+
+  getLikesSentBy(userId: string): LikeRecord[] {
+    return this.getLikes().filter(l => l.fromUserId === userId);
+  }
+
+  getLikesReceivedBy(userId: string): LikeRecord[] {
+    return this.getLikes().filter(l => l.toUserId === userId);
+  }
+
+  hasUserLiked(fromUserId: string, toUserId: string): boolean {
+    return this.getLikes().some(l => l.fromUserId === fromUserId && l.toUserId === toUserId);
+  }
+
+  // EVENT NOTIFICATION REMINDERS
+  getEventReminders(userId: string): string[] {
+    const map = this.getItem<Record<string, string[]>>(STORAGE_KEYS.EVENT_REMINDERS, {});
+    return map[userId] || [];
+  }
+
+  setEventReminders(userId: string, eventIds: string[]): void {
+    const map = this.getItem<Record<string, string[]>>(STORAGE_KEYS.EVENT_REMINDERS, {});
+    map[userId] = eventIds;
+    this.setItem(STORAGE_KEYS.EVENT_REMINDERS, map);
+  }
+
+  isEventReminderSet(userId: string, eventId: string): boolean {
+    const reminders = this.getEventReminders(userId);
+    return reminders.includes(eventId);
+  }
+
+  toggleEventReminder(userId: string, eventId: string): boolean {
+    const reminders = this.getEventReminders(userId);
+    const index = reminders.indexOf(eventId);
+    let isNowReminded = false;
+    if (index >= 0) {
+      reminders.splice(index, 1);
+      isNowReminded = false;
+    } else {
+      reminders.push(eventId);
+      isNowReminded = true;
+    }
+    this.setEventReminders(userId, reminders);
+    return isNowReminded;
   }
 }
 
