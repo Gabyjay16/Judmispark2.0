@@ -46,20 +46,20 @@ const STORAGE_KEYS = {
 // Default Official Payment Info configured by Admin for User Top-Ups
 export const DEFAULT_PAYMENT_INFO: PaymentInfoConfig = {
   mtnMomoNumber: '+237 671 234 567',
-  mtnMomoName: 'JudmiSpark Escrow / Gabriel T.',
+  mtnMomoName: 'JudmiSpark Escrow / Gabsa Brandon',
   orangeMoneyNumber: '+237 691 234 567',
-  orangeMoneyName: 'JudmiSpark Escrow / Gabriel T.',
+  orangeMoneyName: 'JudmiSpark Escrow / Gabsa Brandon',
   instructionsEn: 'Transfer the exact CFA amount via your MTN MoMo or Orange Money dial code. Use your Spark Wallet ID or Display Name as the transfer reason/note. After confirming, take a clear screenshot of the SMS or app receipt and upload it below for immediate admin approval.',
   instructionsFr: 'Transférez le montant exact en CFA via votre code MTN MoMo ou Orange Money. Mettez votre ID Portefeuille Spark ou Pseudo en motif du transfert. Après confirmation, prenez une capture d\'écran claire du reçu et téléversez-la ci-dessous pour validation immédiate par l\'administrateur.',
   updatedAt: new Date().toISOString(),
-  updatedBy: 'Admin (Gabriel)'
+  updatedBy: 'Admin (Gabsa Brandon)'
 };
 
 // Initial Registered Current User
 const DEFAULT_USER: UserProfile = {
   id: 'usr_me_brandon',
-  fullName: 'Brandon Tabi',
-  displayName: 'Brandon',
+  fullName: 'Gabsa Brandon',
+  displayName: 'Gabsa Brandon',
   email: 'gabyjay16@gmail.com',
   phoneNumber: '+237 671 234 567',
   pin: '123456',
@@ -939,10 +939,16 @@ class StorageManager {
 
   getCurrentUser(): UserProfile {
     const user = this.getItem<UserProfile>(STORAGE_KEYS.CURRENT_USER, DEFAULT_USER);
-    // Ensure gabyjay16@gmail.com is designated as Admin
+    // Ensure gabyjay16@gmail.com is designated as Admin and has correct name Gabsa Brandon
     if (user.id === DEFAULT_USER.id || user.email === 'gabyjay16@gmail.com' || !user.email) {
       user.email = 'gabyjay16@gmail.com';
       user.role = 'admin';
+      if (user.fullName === 'Brandon Tabi' || !user.fullName) {
+        user.fullName = 'Gabsa Brandon';
+      }
+      if (user.displayName === 'Brandon' || user.displayName === 'Brandon Tabi') {
+        user.displayName = 'Gabsa Brandon';
+      }
     }
     if (!Array.isArray(user.photos) || user.photos.length === 0) {
       user.photos = user.profilePicture ? [user.profilePicture] : DEFAULT_USER.photos;
@@ -969,6 +975,10 @@ class StorageManager {
   getUsers(): UserProfile[] {
     const users = this.getItem<UserProfile[]>(STORAGE_KEYS.USERS, INITIAL_USERS);
     return users.map(u => {
+      if (u.email === 'gabyjay16@gmail.com' || u.id === DEFAULT_USER.id) {
+        if (u.fullName === 'Brandon Tabi' || !u.fullName) u.fullName = 'Gabsa Brandon';
+        if (u.displayName === 'Brandon' || u.displayName === 'Brandon Tabi') u.displayName = 'Gabsa Brandon';
+      }
       const photos = Array.isArray(u.photos) && u.photos.length > 0 
         ? u.photos 
         : (u.profilePicture ? [u.profilePicture] : []);

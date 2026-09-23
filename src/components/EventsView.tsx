@@ -267,10 +267,10 @@ export const EventsView: React.FC<EventsViewProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-black text-white flex items-center gap-2">
+          <h2 className="text-xl font-black text-[#2D151E] flex items-center gap-2">
             <span>Real-World Events</span>
           </h2>
-          <p className="text-xs text-neutral-400 mt-0.5">
+          <p className="text-xs text-[#8A767E] mt-0.5">
             Hangouts, meetups & gatherings in Cameroon
           </p>
         </div>
@@ -279,7 +279,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
           id="create-event-btn"
           type="button"
           onClick={() => setIsCreateModalOpen(true)}
-          className="py-2 px-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-rose-500/20 transition hover:scale-105"
+          className="py-2 px-4 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white font-extrabold text-xs flex items-center gap-1.5 shadow-md shadow-rose-500/20 transition hover:opacity-95 active:scale-95 cursor-pointer"
         >
           <Plus size={15} />
           <span>New Event</span>
@@ -293,10 +293,10 @@ export const EventsView: React.FC<EventsViewProps> = ({
             key={town}
             type="button"
             onClick={() => setSelectedTown(town)}
-            className={`px-3 py-1 rounded-full whitespace-nowrap font-medium transition ${
+            className={`px-3.5 py-1.5 rounded-full whitespace-nowrap font-bold transition cursor-pointer ${
               selectedTown === town
-                ? 'bg-rose-500 text-white font-bold shadow-sm shadow-rose-500/30'
-                : 'bg-neutral-800 text-neutral-400 hover:text-neutral-200 border border-neutral-700/50'
+                ? 'bg-[#FF4A70] text-white shadow-2xs'
+                : 'bg-white text-[#8A767E] hover:text-[#2D151E] border border-[#E5D7CE]'
             }`}
           >
             {town === 'All' ? 'All Towns' : `📍 ${town}`}
@@ -314,10 +314,10 @@ export const EventsView: React.FC<EventsViewProps> = ({
           return (
             <div
               key={event.id}
-              className="bg-neutral-900 border border-neutral-800 hover:border-neutral-700 rounded-3xl overflow-hidden shadow-2xl transition group"
+              className="bg-white border border-[#EFE3DB] hover:border-[#E5D7CE] rounded-3xl overflow-hidden shadow-sm transition group"
             >
               {/* Photo Gallery (up to 3 photos) */}
-              <div className="grid grid-cols-3 gap-1 h-44 bg-neutral-950 p-1">
+              <div className="grid grid-cols-3 gap-1 h-44 bg-[#FAF4F0] p-1">
                 {event.photos.slice(0, 3).map((photo, pIdx) => (
                   <div key={pIdx} className="relative h-full overflow-hidden rounded-xl">
                     <img 
@@ -333,15 +333,15 @@ export const EventsView: React.FC<EventsViewProps> = ({
               <div className="p-4 space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-base font-extrabold text-white">
+                    <h3 className="text-base font-extrabold text-[#2D151E]">
                       {event.title}
                     </h3>
                     {/* Location prominently displayed */}
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-400 mt-1">
-                      <MapPin size={13} className="shrink-0 fill-rose-500/20" />
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-[#FF4A70] mt-1">
+                      <MapPin size={13} className="shrink-0 fill-[#FF4A70]/20" />
                       <span>{event.neighborhood}, {event.town}</span>
                       {event.venue && (
-                        <span className="text-neutral-400 font-normal">({event.venue})</span>
+                        <span className="text-[#8A767E] font-normal">({event.venue})</span>
                       )}
                     </div>
                   </div>
@@ -352,20 +352,20 @@ export const EventsView: React.FC<EventsViewProps> = ({
                       type="button"
                       onClick={() => handleToggleReminder(event)}
                       title={isReminded ? "Turn off reminder notifications" : "Subscribe to event reminder notifications"}
-                      className={`py-1.5 px-3 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition active:scale-95 cursor-pointer ${
+                      className={`py-1.5 px-3 rounded-full border text-xs font-bold flex items-center gap-1.5 transition active:scale-95 cursor-pointer ${
                         isReminded
-                          ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm shadow-amber-500/10'
-                          : 'bg-neutral-800 text-neutral-300 hover:text-white hover:bg-neutral-700 border-neutral-700'
+                          ? 'bg-[#FF4A70]/15 text-[#FF4A70] border-[#FF4A70]/30 shadow-2xs'
+                          : 'bg-[#FAF4F0] text-[#8A767E] hover:text-[#2D151E] hover:bg-[#F2E7DF] border-[#E5D7CE]'
                       }`}
                     >
                       {isReminded ? (
                         <>
-                          <BellRing size={13} className="text-amber-400 animate-pulse shrink-0" />
+                          <BellRing size={13} className="text-[#FF4A70] animate-pulse shrink-0" />
                           <span>Reminded</span>
                         </>
                       ) : (
                         <>
-                          <Bell size={13} className="text-neutral-400 shrink-0" />
+                          <Bell size={13} className="text-[#8A767E] shrink-0" />
                           <span>Remind Me</span>
                         </>
                       )}
@@ -375,7 +375,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
                       type="button"
                       onClick={() => setShareModalEvent(event)}
                       title="Share Event"
-                      className="p-2 rounded-xl bg-neutral-800 text-neutral-400 hover:text-white border border-neutral-700 transition shrink-0"
+                      className="p-2 rounded-full bg-[#FAF4F0] text-[#8A767E] hover:text-[#2D151E] border border-[#E5D7CE] transition shrink-0 cursor-pointer"
                     >
                       <Share2 size={15} />
                     </button>
@@ -383,50 +383,50 @@ export const EventsView: React.FC<EventsViewProps> = ({
                 </div>
 
                 {/* Date & Time */}
-                <div className="flex items-center gap-4 text-xs text-neutral-300 bg-neutral-950/70 p-2.5 rounded-2xl border border-neutral-800">
+                <div className="flex items-center gap-4 text-xs text-[#2D151E] bg-[#FAF4F0] p-2.5 rounded-2xl border border-[#EFE3DB]">
                   <div className="flex items-center gap-1.5">
-                    <Calendar size={13} className="text-rose-400" />
-                    <span>{event.date}</span>
+                    <Calendar size={13} className="text-[#FF4A70]" />
+                    <span className="font-semibold">{event.date}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <Clock size={13} className="text-amber-400" />
+                    <Clock size={13} className="text-[#FF4A70]" />
                     <span>{event.time}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 ml-auto text-neutral-400 text-[11px]">
-                    <Users size={12} className="text-emerald-400" />
+                  <div className="flex items-center gap-1.5 ml-auto text-[#8A767E] text-[11px]">
+                    <Users size={12} className="text-emerald-600" />
                     <span>{event.joinedUserIds.length} joined</span>
                   </div>
                 </div>
 
-                <p className="text-xs text-neutral-300 leading-relaxed">
+                <p className="text-xs text-[#8A767E] leading-relaxed">
                   {event.description}
                 </p>
 
                 {/* Chat Mode Tag */}
-                <div className="flex items-center justify-between text-[11px] text-neutral-400 pt-1">
+                <div className="flex items-center justify-between text-[11px] text-[#8A767E] pt-1">
                   <span>
-                    Chat Mode: <strong className="text-neutral-200">{event.chatMode}</strong>
+                    Chat Mode: <strong className="text-[#2D151E]">{event.chatMode}</strong>
                   </span>
-                  <span className="text-[10px] text-neutral-500">
+                  <span className="text-[10px] text-[#8A767E]">
                     Host: {event.creatorName}
                   </span>
                 </div>
 
                 {/* Action Buttons: Join and Chat */}
-                <div className="flex items-center gap-2 pt-2 border-t border-neutral-800">
+                <div className="flex items-center gap-2 pt-2 border-t border-[#EFE3DB]">
                   <button
                     type="button"
                     onClick={() => handleJoinEvent(event)}
                     disabled={isJoined}
-                    className={`flex-1 py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition ${
+                    className={`flex-1 py-2.5 px-4 rounded-full font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer ${
                       isJoined
-                        ? 'bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 cursor-default'
-                        : 'bg-rose-500 hover:bg-rose-600 text-white shadow-lg shadow-rose-500/20'
+                        ? 'bg-emerald-50 border border-emerald-300 text-emerald-700 cursor-default'
+                        : 'bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white shadow-md shadow-rose-500/20'
                     }`}
                   >
                     {isJoined ? (
                       <>
-                        <Check size={14} className="text-emerald-400" />
+                        <Check size={14} className="text-emerald-600" />
                         <span>Joined ({event.joinedUserIds.length})</span>
                       </>
                     ) : (
@@ -441,7 +441,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     <button
                       type="button"
                       onClick={() => openEventChat(event)}
-                      className="py-2.5 px-4 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-bold text-xs flex items-center gap-1.5 border border-neutral-700 transition"
+                      className="py-2.5 px-4 rounded-full bg-[#FAF4F0] hover:bg-[#F2E7DF] text-[#2D151E] font-bold text-xs flex items-center gap-1.5 border border-[#E5D7CE] transition cursor-pointer"
                     >
                       <MessageSquare size={14} />
                       <span>Event Chat</span>
@@ -456,22 +456,22 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
       {/* EVENT CHAT MODAL */}
       {activeChatEvent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/85 backdrop-blur-md">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-lg h-[88vh] flex flex-col shadow-2xl overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white border border-[#EFE3DB] rounded-3xl w-full max-w-lg h-[88vh] flex flex-col shadow-2xl overflow-hidden">
             {/* Header */}
-            <div className="p-4 border-b border-neutral-800 flex items-center justify-between bg-neutral-950">
+            <div className="p-4 border-b border-[#EFE3DB] flex items-center justify-between bg-[#FAF4F0]">
               <div>
-                <h3 className="text-sm font-bold text-white truncate max-w-xs">
+                <h3 className="text-sm font-bold text-[#2D151E] truncate max-w-xs">
                   {activeChatEvent.title} — Chat
                 </h3>
-                <span className="text-[11px] text-neutral-400">
+                <span className="text-[11px] text-[#8A767E]">
                   {activeChatEvent.chatMode} • {activeChatEvent.joinedUserIds.length} members
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveChatEvent(null)}
-                className="text-neutral-400 hover:text-white text-xs px-2.5 py-1 rounded-lg border border-neutral-800"
+                className="text-[#8A767E] hover:text-[#2D151E] text-xs px-3 py-1 rounded-full border border-[#E5D7CE] bg-white cursor-pointer font-bold"
               >
                 Close
               </button>
@@ -487,9 +487,9 @@ export const EventsView: React.FC<EventsViewProps> = ({
             />
 
             {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-neutral-950/60">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#FAF4F0]/60">
               {eventMessages.length === 0 ? (
-                <div className="text-center py-8 text-xs text-neutral-500">
+                <div className="text-center py-8 text-xs text-[#8A767E]">
                   No messages yet in this event chat. Say hello to participants!
                 </div>
               ) : (
@@ -497,11 +497,13 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   const isMe = msg.senderId === currentUser.id;
                   return (
                     <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                      <span className="text-[10px] text-neutral-500 mb-0.5 px-1">
+                      <span className="text-[10px] text-[#8A767E] mb-0.5 px-1">
                         {msg.senderName}
                       </span>
-                      <div className={`max-w-[80%] rounded-2xl p-2.5 text-xs space-y-1.5 ${
-                        isMe ? 'bg-rose-600 text-white' : 'bg-neutral-800 text-neutral-200'
+                      <div className={`max-w-[80%] rounded-2xl p-2.5 text-xs space-y-1.5 shadow-2xs ${
+                        isMe 
+                          ? 'bg-gradient-to-r from-[#F73B66] to-[#FF874F] text-white' 
+                          : 'bg-white border border-[#EFE3DB] text-[#2D151E]'
                       }`}>
                         {/* Event chat photo */}
                         {msg.imageUrl && (
@@ -536,15 +538,15 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
             {/* Selected photo preview strip */}
             {eventChatPhoto && (
-              <div className="px-3 py-1.5 bg-neutral-950 border-t border-neutral-800 flex items-center justify-between">
+              <div className="px-3 py-1.5 bg-[#FAF4F0] border-t border-[#EFE3DB] flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <img src={eventChatPhoto} alt="Preview" className="w-9 h-9 rounded-lg object-cover border border-rose-500/50" />
-                  <span className="text-[11px] text-neutral-300">Photo attached</span>
+                  <img src={eventChatPhoto} alt="Preview" className="w-9 h-9 rounded-lg object-cover border border-[#FF4A70]/50" />
+                  <span className="text-[11px] text-[#2D151E] font-medium">Photo attached</span>
                 </div>
                 <button 
                   type="button" 
                   onClick={() => setEventChatPhoto(null)} 
-                  className="text-neutral-400 hover:text-white text-xs p-1"
+                  className="text-[#8A767E] hover:text-[#2D151E] text-xs p-1 cursor-pointer"
                 >
                   <X size={14} />
                 </button>
@@ -552,9 +554,9 @@ export const EventsView: React.FC<EventsViewProps> = ({
             )}
 
             {/* Input Check Mode */}
-            <div className="p-3 bg-neutral-950 border-t border-neutral-800">
+            <div className="p-3 bg-white border-t border-[#EFE3DB]">
               {activeChatEvent.chatMode === 'Creator Only' && activeChatEvent.creatorId !== currentUser.id ? (
-                <div className="p-2.5 bg-neutral-900 border border-neutral-800 rounded-xl text-center text-xs text-neutral-400 flex items-center justify-center gap-2">
+                <div className="p-2.5 bg-[#FAF4F0] border border-[#EFE3DB] rounded-xl text-center text-xs text-[#8A767E] flex items-center justify-center gap-2">
                   <Lock size={13} />
                   <span>Only the event creator can post messages in this chat.</span>
                 </div>
@@ -564,10 +566,10 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     type="button"
                     onClick={() => eventFileInputRef.current?.click()}
                     title="Send photo"
-                    className={`w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 transition ${
+                    className={`w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 transition cursor-pointer ${
                       eventChatPhoto 
-                        ? 'bg-rose-500 text-white border-rose-400' 
-                        : 'bg-neutral-900 hover:bg-neutral-800 text-neutral-300 hover:text-white border-neutral-800'
+                        ? 'bg-[#FF4A70] text-white border-[#FF4A70]' 
+                        : 'bg-[#FAF4F0] hover:bg-[#F2E7DF] text-[#8A767E] hover:text-[#2D151E] border-[#E5D7CE]'
                     }`}
                   >
                     <ImageIcon size={16} />
@@ -575,7 +577,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsEventVoiceOpen(true)}
-                    className="w-10 h-10 rounded-2xl bg-neutral-900 hover:bg-rose-500/20 text-neutral-300 hover:text-rose-400 border border-neutral-800 flex items-center justify-center shrink-0"
+                    className="w-10 h-10 rounded-2xl bg-[#FAF4F0] hover:bg-[#FF4A70]/15 text-[#8A767E] hover:text-[#FF4A70] border border-[#E5D7CE] flex items-center justify-center shrink-0 cursor-pointer"
                   >
                     <Mic size={16} />
                   </button>
@@ -584,13 +586,13 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     value={chatInputText}
                     onChange={(e) => setChatInputText(e.target.value)}
                     placeholder={eventChatPhoto ? "Add a message..." : "Message event participants..."}
-                    className="flex-1 bg-neutral-900 border border-neutral-800 rounded-2xl py-2 px-3 text-xs text-white focus:outline-none focus:border-rose-500"
+                    className="flex-1 bg-[#FAF4F0] border border-[#E5D7CE] rounded-2xl py-2 px-3 text-xs text-[#2D151E] placeholder-[#8A767E] focus:outline-none focus:border-[#FF4A70]"
                   />
                   <button
                     type="button"
                     disabled={!chatInputText.trim() && !eventChatPhoto}
                     onClick={() => handleSendEventMessage()}
-                    className="w-10 h-10 rounded-2xl bg-rose-500 hover:bg-rose-600 disabled:opacity-40 text-white flex items-center justify-center shrink-0"
+                    className="w-10 h-10 rounded-2xl bg-gradient-to-r from-[#F73B66] to-[#FF874F] disabled:opacity-40 text-white flex items-center justify-center shrink-0 shadow-md shadow-rose-500/20 cursor-pointer"
                   >
                     <Send size={15} />
                   </button>
@@ -627,7 +629,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
       {/* EVENT VOICE RECORDER MODAL */}
       {isEventVoiceOpen && activeChatEvent && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
           <AudioRecorder
             isRegistration={false}
             userName={currentUser.displayName}
@@ -641,25 +643,25 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
       {/* SHAREABLE EVENT LINK MODAL (Spec #31) */}
       {shareModalEvent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-                <Share2 size={16} className="text-rose-500" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+          <div className="bg-white border border-[#EFE3DB] rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#EFE3DB] pb-3">
+              <h3 className="text-sm font-bold text-[#2D151E] flex items-center gap-1.5">
+                <Share2 size={16} className="text-[#FF4A70]" />
                 <span>Share Event</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setShareModalEvent(null)}
-                className="text-neutral-400 hover:text-white text-xs"
+                className="text-[#8A767E] hover:text-[#2D151E] text-xs font-bold cursor-pointer"
               >
                 Close
               </button>
             </div>
 
             <div>
-              <h4 className="text-xs font-bold text-white mb-1">{shareModalEvent.title}</h4>
-              <p className="text-[11px] text-neutral-400">
+              <h4 className="text-xs font-bold text-[#2D151E] mb-1">{shareModalEvent.title}</h4>
+              <p className="text-[11px] text-[#8A767E]">
                 📍 {shareModalEvent.neighborhood}, {shareModalEvent.town} • {shareModalEvent.date}
               </p>
             </div>
@@ -670,7 +672,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
                 href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out "${shareModalEvent.title}" on JudmiSpark! 📍 ${shareModalEvent.town}: ${getShareUrl(shareModalEvent)}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-emerald-900/50 transition"
+                className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-emerald-100 transition"
               >
                 WhatsApp
               </a>
@@ -678,7 +680,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
                 href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Going to "${shareModalEvent.title}" in ${shareModalEvent.town}! Join on JudmiSpark: ${getShareUrl(shareModalEvent)}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-emerald-900/50 transition"
+                className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-emerald-100 transition"
               >
                 WhatsApp Status
               </a>
@@ -686,7 +688,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
                 href={`https://t.me/share/url?url=${encodeURIComponent(getShareUrl(shareModalEvent))}&text=${encodeURIComponent(shareModalEvent.title)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-xl bg-sky-950/40 border border-sky-500/30 text-sky-300 text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-sky-900/50 transition"
+                className="p-2.5 rounded-xl bg-sky-50 border border-sky-200 text-sky-700 text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-sky-100 transition"
               >
                 Telegram
               </a>
@@ -694,7 +696,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(shareModalEvent))}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-xl bg-blue-950/40 border border-blue-500/30 text-blue-300 text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-blue-900/50 transition"
+                className="p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-blue-100 transition"
               >
                 Facebook
               </a>
@@ -702,17 +704,17 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
             {/* Copy Link Input */}
             <div className="pt-2">
-              <div className="flex items-center gap-2 bg-neutral-950 p-1.5 rounded-xl border border-neutral-800">
+              <div className="flex items-center gap-2 bg-[#FAF4F0] p-1.5 rounded-xl border border-[#E5D7CE]">
                 <input
                   type="text"
                   readOnly
                   value={getShareUrl(shareModalEvent)}
-                  className="bg-transparent text-xs text-neutral-300 px-2 flex-1 focus:outline-none"
+                  className="bg-transparent text-xs text-[#2D151E] px-2 flex-1 focus:outline-none"
                 />
                 <button
                   type="button"
                   onClick={() => handleCopyLink(shareModalEvent)}
-                  className="px-3 py-1.5 rounded-lg bg-rose-500 text-white text-xs font-bold shrink-0 transition"
+                  className="px-3.5 py-1.5 rounded-lg bg-[#FF4A70] text-white text-xs font-bold shrink-0 transition cursor-pointer"
                 >
                   {copySuccess ? 'Copied!' : 'Copy'}
                 </button>
@@ -724,14 +726,14 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
       {/* CREATE EVENT MODAL */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl my-6">
-            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-              <h3 className="text-sm font-bold text-white">Create New Event</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white border border-[#EFE3DB] rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl my-6">
+            <div className="flex items-center justify-between border-b border-[#EFE3DB] pb-3">
+              <h3 className="text-sm font-bold text-[#2D151E]">Create New Event</h3>
               <button
                 type="button"
                 onClick={() => setIsCreateModalOpen(false)}
-                className="text-neutral-400 hover:text-white text-xs"
+                className="text-[#8A767E] hover:text-[#2D151E] text-xs font-bold cursor-pointer"
               >
                 Cancel
               </button>
@@ -739,7 +741,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
             <form onSubmit={handleCreateEvent} className="space-y-3">
               <div>
-                <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                <label className="block text-xs font-semibold text-[#2D151E] mb-1">
                   Event Title
                 </label>
                 <input
@@ -748,19 +750,19 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   value={newEvent.title}
                   onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
                   placeholder="e.g. Friday Night Hangout"
-                  className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                  className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] placeholder-[#8A767E] focus:outline-none focus:border-[#FF4A70]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                  <label className="block text-xs font-semibold text-[#2D151E] mb-1">
                     Town / City
                   </label>
                   <select
                     value={newEvent.town}
                     onChange={(e) => setNewEvent({ ...newEvent, town: e.target.value as TownLocation })}
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                    className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] focus:outline-none focus:border-[#FF4A70]"
                   >
                     {CAMEROON_TOWNS.map(t => (
                       <option key={t} value={t}>{t}</option>
@@ -769,7 +771,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                  <label className="block text-xs font-semibold text-[#2D151E] mb-1">
                     Neighborhood / Area
                   </label>
                   <input
@@ -778,14 +780,14 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     value={newEvent.neighborhood}
                     onChange={(e) => setNewEvent({ ...newEvent, neighborhood: e.target.value })}
                     placeholder="e.g. Bonapriso, Molyko"
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                    className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] placeholder-[#8A767E] focus:outline-none focus:border-[#FF4A70]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                  <label className="block text-xs font-semibold text-[#2D151E] mb-1">
                     Date
                   </label>
                   <input
@@ -793,12 +795,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     value={newEvent.date}
                     onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
                     placeholder="25 September 2026"
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                    className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] placeholder-[#8A767E] focus:outline-none focus:border-[#FF4A70]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                  <label className="block text-xs font-semibold text-[#2D151E] mb-1">
                     Time
                   </label>
                   <input
@@ -806,13 +808,13 @@ export const EventsView: React.FC<EventsViewProps> = ({
                     value={newEvent.time}
                     onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })}
                     placeholder="8:00 PM"
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                    className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] placeholder-[#8A767E] focus:outline-none focus:border-[#FF4A70]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                <label className="block text-xs font-semibold text-[#2D151E] mb-1">
                   Optional Venue
                 </label>
                 <input
@@ -820,12 +822,12 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   value={newEvent.venue}
                   onChange={(e) => setNewEvent({ ...newEvent, venue: e.target.value })}
                   placeholder="e.g. Green Terrace Lounge"
-                  className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                  className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] placeholder-[#8A767E] focus:outline-none focus:border-[#FF4A70]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                <label className="block text-xs font-semibold text-[#2D151E] mb-1">
                   Description
                 </label>
                 <textarea
@@ -833,18 +835,18 @@ export const EventsView: React.FC<EventsViewProps> = ({
                   value={newEvent.description}
                   onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
                   placeholder="Come chill and meet new people..."
-                  className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500 resize-none"
+                  className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] placeholder-[#8A767E] focus:outline-none focus:border-[#FF4A70] resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                <label className="block text-xs font-semibold text-[#2D151E] mb-1">
                   Event Chat Mode
                 </label>
                 <select
                   value={newEvent.chatMode}
                   onChange={(e) => setNewEvent({ ...newEvent, chatMode: e.target.value as any })}
-                  className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-rose-500"
+                  className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] focus:outline-none focus:border-[#FF4A70]"
                 >
                   <option value="Open Chat">Open Chat (Everyone can chat & voice)</option>
                   <option value="Creator Only">Creator Only (Announcements only)</option>
@@ -854,7 +856,7 @@ export const EventsView: React.FC<EventsViewProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-xs shadow-lg shadow-rose-500/25 transition hover:scale-[1.02]"
+                className="w-full py-3 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white font-extrabold text-xs shadow-md shadow-rose-500/25 transition hover:scale-[1.01] cursor-pointer"
               >
                 Publish Event
               </button>

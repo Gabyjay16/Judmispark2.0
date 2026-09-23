@@ -391,15 +391,15 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
       )}
 
       {/* Spark Balance Card */}
-      <div className="bg-gradient-to-br from-amber-500 via-amber-600 to-rose-600 rounded-3xl p-6 text-neutral-950 shadow-2xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-[#FA4468] via-[#FF586E] to-[#FF7558] rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-48 h-48 bg-white/15 rounded-full blur-2xl -mr-10 -mt-10" />
         
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 relative z-10">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-neutral-950/20 backdrop-blur-md flex items-center justify-center font-black">
+            <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center font-black text-white">
               ⚡
             </div>
-            <span className="text-xs font-black tracking-wider uppercase opacity-90">
+            <span className="text-xs font-black tracking-wider uppercase text-white/95">
               JudmiSpark Wallet
             </span>
           </div>
@@ -407,7 +407,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
           <button 
             type="button"
             onClick={handleCopyWalletId}
-            className="flex items-center gap-1.5 bg-neutral-950/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-mono cursor-pointer hover:bg-neutral-950/30 transition"
+            className="flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-mono cursor-pointer hover:bg-white/30 transition text-white"
             title="Copy Wallet ID"
           >
             <span>{currentUser.walletId}</span>
@@ -415,41 +415,41 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
           </button>
         </div>
 
-        <div>
+        <div className="relative z-10">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold opacity-80">Available Sparks</span>
+            <span className="text-xs font-semibold text-white/90">Available Sparks</span>
             {totalBalance !== availableBalance && (
-              <span className="text-[10px] font-bold bg-neutral-950/20 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full text-white">
                 {totalBalance - availableBalance} SPK on hold
               </span>
             )}
           </div>
           <div className="flex items-baseline gap-2 mt-0.5">
-            <h1 className="text-4xl font-black tracking-tight">
+            <h1 className="text-4xl font-black tracking-tight text-white">
               {availableBalance}
             </h1>
-            <span className="text-lg font-bold">SPARKS</span>
+            <span className="text-lg font-bold text-white/90">SPARKS</span>
           </div>
-          <p className="text-sm font-bold opacity-90 mt-1">
+          <p className="text-sm font-bold text-white/95 mt-1">
             ≈ {(availableBalance * 500).toLocaleString()} CFA
           </p>
         </div>
 
         {/* Quick action buttons on card */}
-        <div className="grid grid-cols-3 gap-2 mt-6 pt-4 border-t border-black/10">
+        <div className="grid grid-cols-3 gap-2 mt-6 pt-4 border-t border-white/20 relative z-10">
           <button
             type="button"
             onClick={() => setActiveTab('buy')}
-            className="py-2 rounded-xl bg-neutral-950 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-md hover:bg-neutral-900 transition cursor-pointer"
+            className="py-2.5 rounded-xl bg-[#2D151E] text-white font-bold text-xs flex items-center justify-center gap-1 shadow-md hover:bg-black transition cursor-pointer"
           >
-            <Plus size={13} className="text-amber-400" />
+            <Plus size={13} className="text-[#FF7B60]" />
             <span>Top Up</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('send')}
-            className="py-2 rounded-xl bg-neutral-950/20 hover:bg-neutral-950/30 text-neutral-950 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer"
+            className="py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer"
           >
             <Send size={13} />
             <span>Transfer</span>
@@ -458,7 +458,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
           <button
             type="button"
             onClick={() => setActiveTab('withdraw')}
-            className="py-2 rounded-xl bg-neutral-950/20 hover:bg-neutral-950/30 text-neutral-950 font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer"
+            className="py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs flex items-center justify-center gap-1 transition cursor-pointer"
           >
             <Download size={13} />
             <span>Cashout</span>
@@ -469,8 +469,8 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
       {feedback && (
         <div className={`p-3 rounded-2xl text-xs flex items-start gap-2 ${
           feedback.type === 'success' 
-            ? 'bg-emerald-950/50 border border-emerald-500/40 text-emerald-300' 
-            : 'bg-rose-950/50 border border-rose-500/40 text-rose-300'
+            ? 'bg-emerald-50 border border-emerald-200 text-emerald-800' 
+            : 'bg-rose-50 border border-rose-200 text-rose-800'
         }`}>
           {feedback.type === 'success' ? <CheckCircle2 size={16} className="shrink-0 mt-0.5" /> : <AlertCircle size={16} className="shrink-0 mt-0.5" />}
           <span>{feedback.message}</span>
@@ -478,32 +478,32 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
       )}
 
       {/* Tabs navigation */}
-      <div className="grid grid-cols-4 gap-1 p-1 bg-neutral-900 border border-neutral-800 rounded-2xl text-xs font-semibold">
+      <div className="grid grid-cols-4 gap-1 p-1 bg-[#F2E7DF] border border-[#E9DDD5] rounded-2xl text-xs font-semibold">
         <button
           type="button"
           onClick={() => setActiveTab('overview')}
-          className={`py-2 rounded-xl transition cursor-pointer ${activeTab === 'overview' ? 'bg-neutral-800 text-white shadow' : 'text-neutral-400 hover:text-white'}`}
+          className={`py-2 rounded-xl transition cursor-pointer ${activeTab === 'overview' ? 'bg-white text-[#2D151E] font-bold shadow-xs' : 'text-[#8A767E] hover:text-[#2D151E]'}`}
         >
           Ledger
         </button>
         <button
           type="button"
           onClick={() => setActiveTab('buy')}
-          className={`py-2 rounded-xl transition cursor-pointer ${activeTab === 'buy' ? 'bg-neutral-800 text-amber-400 shadow' : 'text-neutral-400 hover:text-white'}`}
+          className={`py-2 rounded-xl transition cursor-pointer ${activeTab === 'buy' ? 'bg-white text-[#FF4A70] font-bold shadow-xs' : 'text-[#8A767E] hover:text-[#2D151E]'}`}
         >
           Top Up
         </button>
         <button
           type="button"
           onClick={() => setActiveTab('send')}
-          className={`py-2 rounded-xl transition cursor-pointer ${activeTab === 'send' ? 'bg-neutral-800 text-amber-400 shadow' : 'text-neutral-400 hover:text-white'}`}
+          className={`py-2 rounded-xl transition cursor-pointer ${activeTab === 'send' ? 'bg-white text-[#FF4A70] font-bold shadow-xs' : 'text-[#8A767E] hover:text-[#2D151E]'}`}
         >
           Transfer
         </button>
         <button
           type="button"
           onClick={() => setActiveTab('withdraw')}
-          className={`py-2 rounded-xl transition cursor-pointer ${activeTab === 'withdraw' ? 'bg-neutral-800 text-amber-400 shadow' : 'text-neutral-400 hover:text-white'}`}
+          className={`py-2 rounded-xl transition cursor-pointer ${activeTab === 'withdraw' ? 'bg-white text-[#FF4A70] font-bold shadow-xs' : 'text-[#8A767E] hover:text-[#2D151E]'}`}
         >
           Withdraw
         </button>
@@ -513,7 +513,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
       {activeTab === 'overview' && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold text-neutral-300 uppercase tracking-wider">
+            <h3 className="text-xs font-bold text-[#8A767E] uppercase tracking-wider">
               Transaction History
             </h3>
             <div className="flex items-center gap-1 text-[11px] overflow-x-auto">
@@ -523,7 +523,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                   type="button"
                   onClick={() => setFilterType(type)}
                   className={`px-2 py-0.5 rounded-lg capitalize transition cursor-pointer ${
-                    filterType === type ? 'bg-neutral-800 text-white font-bold' : 'text-neutral-500 hover:text-neutral-300'
+                    filterType === type ? 'bg-white text-[#2D151E] font-bold shadow-2xs' : 'text-[#8A767E] hover:text-[#2D151E]'
                   }`}
                 >
                   {type}
@@ -534,7 +534,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
 
           <div className="space-y-2">
             {filteredTransactions.length === 0 ? (
-              <div className="p-8 bg-neutral-900/60 border border-neutral-800 rounded-3xl text-center text-xs text-neutral-500">
+              <div className="p-8 bg-white border border-[#EFE3DB] rounded-3xl text-center text-xs text-[#8A767E]">
                 No transactions found in this view.
               </div>
             ) : (
@@ -546,21 +546,21 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                 return (
                   <div
                     key={tx.id}
-                    className="p-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl flex flex-col gap-2 transition hover:border-neutral-700"
+                    className="p-3.5 bg-white border border-[#EFE3DB] rounded-2xl flex flex-col gap-2 transition hover:border-[#E5D7CE] shadow-2xs"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-2.5">
                         <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs ${
                           isCredit 
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                            : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                            ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' 
+                            : 'bg-rose-50 text-rose-600 border border-rose-200'
                         }`}>
                           {isCredit ? <ArrowDownLeft size={15} /> : <ArrowUpRight size={15} />}
                         </div>
 
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-white">
+                            <span className="text-xs font-bold text-[#2D151E]">
                               {tx.transactionType === 'DEPOSIT' 
                                 ? 'MoMo Deposit Top-Up'
                                 : tx.transactionType === 'WITHDRAWAL'
@@ -569,32 +569,32 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                             </span>
                             <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-md ${
                               tx.status === 'COMPLETED' 
-                                ? 'bg-emerald-500/20 text-emerald-400'
+                                ? 'bg-emerald-100 text-emerald-700'
                                 : tx.status === 'PENDING'
-                                ? 'bg-amber-500/20 text-amber-400 animate-pulse'
-                                : 'bg-rose-500/20 text-rose-400'
+                                ? 'bg-amber-100 text-amber-700 animate-pulse'
+                                : 'bg-rose-100 text-rose-700'
                             }`}>
                               {tx.status}
                             </span>
                           </div>
-                          <span className="text-[10px] text-neutral-400 block mt-0.5">
+                          <span className="text-[10px] text-[#8A767E] block mt-0.5">
                             {new Date(tx.createdAt).toLocaleDateString()} at {new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • Ref: {tx.reference}
                           </span>
                         </div>
                       </div>
 
                       <div className="text-right shrink-0">
-                        <div className={`text-xs font-black ${isCredit ? 'text-emerald-400' : 'text-neutral-200'}`}>
+                        <div className={`text-xs font-black ${isCredit ? 'text-emerald-600' : 'text-[#2D151E]'}`}>
                           {isCredit ? '+' : '-'}{tx.sparks} SPK
                         </div>
-                        <span className="text-[10px] text-neutral-400 block">
+                        <span className="text-[10px] text-[#8A767E] block">
                           {tx.cfaAmount.toLocaleString()} CFA
                         </span>
                       </div>
                     </div>
 
                     {/* Screenshot proof or notes */}
-                    <div className="flex items-center justify-between pt-1 border-t border-neutral-800/80 text-[11px] text-neutral-400">
+                    <div className="flex items-center justify-between pt-1 border-t border-[#F2E7DF] text-[11px] text-[#8A767E]">
                       <span className="truncate max-w-[220px]">
                         {tx.note || (tx.provider ? `Via ${tx.provider}` : '')}
                       </span>
@@ -602,7 +602,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                         <button
                           type="button"
                           onClick={() => setViewingScreenshot(tx.screenshotUrl!)}
-                          className="flex items-center gap-1 text-[10px] font-bold text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-0.5 rounded-md border border-amber-500/20 transition cursor-pointer shrink-0"
+                          className="flex items-center gap-1 text-[10px] font-bold text-[#FF4A70] hover:text-[#E03A60] bg-[#FF4A70]/10 hover:bg-[#FF4A70]/20 px-2 py-0.5 rounded-md border border-[#FF4A70]/20 transition cursor-pointer shrink-0"
                         >
                           <ImageIcon size={11} />
                           <span>View Proof Screenshot</span>
@@ -612,7 +612,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
 
                     {/* Admin Rejection Reason if any */}
                     {tx.status === 'REJECTED' && tx.adminRejectionReason && (
-                      <div className="text-[11px] bg-rose-500/10 border border-rose-500/20 text-rose-300 p-2 rounded-xl">
+                      <div className="text-[11px] bg-rose-50 border border-rose-200 text-rose-700 p-2 rounded-xl">
                         <strong>Reason:</strong> {tx.adminRejectionReason}
                       </div>
                     )}
@@ -626,22 +626,22 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
 
       {/* TAB 2: BUY / TOP UP SPARKS (MoMo with Admin Payment Info & Screenshot Upload) */}
       {activeTab === 'buy' && (
-        <form onSubmit={handleBuySubmit} className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 space-y-4 shadow-xl">
+        <form onSubmit={handleBuySubmit} className="bg-white border border-[#EFE3DB] rounded-3xl p-5 space-y-4 shadow-sm">
           <div>
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white">Top Up Sparks</h3>
-              <span className="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+              <h3 className="text-sm font-bold text-[#2D151E]">Top Up Sparks</h3>
+              <span className="text-[11px] font-bold text-[#FF4A70] bg-[#FF4A70]/10 px-2 py-0.5 rounded-full border border-[#FF4A70]/20">
                 1 Spark = 500 CFA
               </span>
             </div>
-            <p className="text-xs text-neutral-400 mt-1">
+            <p className="text-xs text-[#8A767E] mt-1">
               Send MoMo payment to admin, upload your transfer screenshot, and receive Sparks once approved.
             </p>
           </div>
 
           {/* STEP 1: Select Spark Package */}
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-2">
+            <label className="block text-xs font-semibold text-[#8A767E] mb-2">
               1. Select Spark Package
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -657,61 +657,61 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                   onClick={() => setBuySparks({ ...buySparks, sparks: pkg.sparks })}
                   className={`p-3 rounded-2xl border text-left transition cursor-pointer ${
                     buySparks.sparks === pkg.sparks 
-                      ? 'bg-amber-500/10 border-amber-500 text-white ring-1 ring-amber-500' 
-                      : 'bg-neutral-950 border-neutral-800 text-neutral-400 hover:text-white'
+                      ? 'bg-[#FF4A70]/10 border-[#FF4A70] text-[#2D151E] ring-1 ring-[#FF4A70]' 
+                      : 'bg-[#FAF4F0] border-[#E5D7CE] text-[#8A767E] hover:text-[#2D151E]'
                   }`}
                 >
-                  <div className="text-base font-black text-amber-400">{pkg.sparks} Sparks</div>
-                  <div className="text-xs font-medium text-neutral-300 mt-0.5">{pkg.cfa.toLocaleString()} CFA</div>
+                  <div className="text-base font-black text-[#FF4A70]">{pkg.sparks} Sparks</div>
+                  <div className="text-xs font-medium text-[#8A767E] mt-0.5">{pkg.cfa.toLocaleString()} CFA</div>
                 </button>
               ))}
             </div>
           </div>
 
           {/* STEP 2: Admin MoMo Payment Details */}
-          <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-3.5 space-y-2.5">
+          <div className="bg-[#FAF4F0] border border-[#E9DDD5] rounded-2xl p-3.5 space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                <Smartphone size={14} className="text-amber-400" />
+              <span className="text-xs font-bold text-[#2D151E] flex items-center gap-1.5">
+                <Smartphone size={14} className="text-[#FF4A70]" />
                 <span>2. Official Admin Payment Details</span>
               </span>
-              <span className="text-[10px] text-neutral-500 font-mono">Tap to copy</span>
+              <span className="text-[10px] text-[#8A767E] font-mono">Tap to copy</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
               {/* MTN MoMo */}
               <div 
                 onClick={() => handleCopyAdminNumber(paymentInfo.mtnMomoNumber, 'momo')}
-                className="bg-neutral-900/80 hover:bg-neutral-900 border border-neutral-800 p-2.5 rounded-xl cursor-pointer transition flex items-center justify-between"
+                className="bg-white hover:bg-[#F8EFEA] border border-[#E5D7CE] p-2.5 rounded-xl cursor-pointer transition flex items-center justify-between shadow-2xs"
               >
                 <div>
-                  <span className="text-[10px] font-bold text-yellow-400 block">MTN Mobile Money</span>
-                  <span className="font-mono font-bold text-white text-xs">{paymentInfo.mtnMomoNumber}</span>
-                  <span className="text-[10px] text-neutral-400 block">{paymentInfo.mtnMomoName}</span>
+                  <span className="text-[10px] font-bold text-amber-600 block">MTN Mobile Money</span>
+                  <span className="font-mono font-bold text-[#2D151E] text-xs">{paymentInfo.mtnMomoNumber}</span>
+                  <span className="text-[10px] text-[#8A767E] block">{paymentInfo.mtnMomoName}</span>
                 </div>
-                <button type="button" className="p-1 rounded bg-neutral-800 text-neutral-300">
-                  {copiedAdminMomo ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                <button type="button" className="p-1 rounded bg-[#F2E7DF] text-[#2D151E]">
+                  {copiedAdminMomo ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
                 </button>
               </div>
 
               {/* Orange Money */}
               <div 
                 onClick={() => handleCopyAdminNumber(paymentInfo.orangeMoneyNumber, 'orange')}
-                className="bg-neutral-900/80 hover:bg-neutral-900 border border-neutral-800 p-2.5 rounded-xl cursor-pointer transition flex items-center justify-between"
+                className="bg-white hover:bg-[#F8EFEA] border border-[#E5D7CE] p-2.5 rounded-xl cursor-pointer transition flex items-center justify-between shadow-2xs"
               >
                 <div>
-                  <span className="text-[10px] font-bold text-orange-400 block">Orange Money</span>
-                  <span className="font-mono font-bold text-white text-xs">{paymentInfo.orangeMoneyNumber}</span>
-                  <span className="text-[10px] text-neutral-400 block">{paymentInfo.orangeMoneyName}</span>
+                  <span className="text-[10px] font-bold text-orange-600 block">Orange Money</span>
+                  <span className="font-mono font-bold text-[#2D151E] text-xs">{paymentInfo.orangeMoneyNumber}</span>
+                  <span className="text-[10px] text-[#8A767E] block">{paymentInfo.orangeMoneyName}</span>
                 </div>
-                <button type="button" className="p-1 rounded bg-neutral-800 text-neutral-300">
-                  {copiedAdminOrange ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                <button type="button" className="p-1 rounded bg-[#F2E7DF] text-[#2D151E]">
+                  {copiedAdminOrange ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
                 </button>
               </div>
             </div>
 
             {paymentInfo.instructionsEn && (
-              <p className="text-[10px] text-neutral-400 italic pt-1 border-t border-neutral-800/60">
+              <p className="text-[10px] text-[#8A767E] italic pt-1 border-t border-[#E5D7CE]">
                 📌 {paymentInfo.instructionsEn}
               </p>
             )}
@@ -719,7 +719,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
 
           {/* STEP 3: Payment Method Used */}
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+            <label className="block text-xs font-semibold text-[#8A767E] mb-1.5">
               3. You paid via:
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -728,8 +728,8 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                 onClick={() => setBuySparks({ ...buySparks, provider: 'MTN_MOMO' })}
                 className={`py-2 px-3 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   buySparks.provider === 'MTN_MOMO' 
-                    ? 'bg-amber-500 text-neutral-950 border-amber-500' 
-                    : 'bg-neutral-950 border-neutral-800 text-neutral-400'
+                    ? 'bg-amber-500 text-white border-amber-500 shadow-xs' 
+                    : 'bg-[#FAF4F0] border-[#E5D7CE] text-[#8A767E]'
                 }`}
               >
                 <Smartphone size={13} />
@@ -741,8 +741,8 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                 onClick={() => setBuySparks({ ...buySparks, provider: 'ORANGE_MONEY' })}
                 className={`py-2 px-3 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   buySparks.provider === 'ORANGE_MONEY' 
-                    ? 'bg-amber-500 text-neutral-950 border-amber-500' 
-                    : 'bg-neutral-950 border-neutral-800 text-neutral-400'
+                    ? 'bg-orange-500 text-white border-orange-500 shadow-xs' 
+                    : 'bg-[#FAF4F0] border-[#E5D7CE] text-[#8A767E]'
                 }`}
               >
                 <Smartphone size={13} />
@@ -754,7 +754,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
           {/* Sender Phone & Transaction Reference */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-neutral-300 mb-1">
+              <label className="block text-xs font-semibold text-[#8A767E] mb-1">
                 Your Sender Phone Number
               </label>
               <input
@@ -763,12 +763,12 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                 value={buySparks.senderPhone}
                 onChange={(e) => setBuySparks({ ...buySparks, senderPhone: e.target.value })}
                 placeholder="e.g. 671234567"
-                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] focus:outline-none focus:border-[#FF4A70]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-neutral-300 mb-1">
+              <label className="block text-xs font-semibold text-[#8A767E] mb-1">
                 MoMo Transaction ID / Reference
               </label>
               <input
@@ -777,7 +777,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                 value={buySparks.reference}
                 onChange={(e) => setBuySparks({ ...buySparks, reference: e.target.value })}
                 placeholder="e.g. MP240922..."
-                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-mono"
+                className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] focus:outline-none focus:border-[#FF4A70] font-mono"
               />
             </div>
           </div>
@@ -830,12 +830,12 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                 </button>
               </div>
             ) : (
-              <label className="border-2 border-dashed border-neutral-800 hover:border-amber-500/50 rounded-2xl p-4 flex flex-col items-center justify-center gap-2 bg-neutral-950 cursor-pointer transition">
-                <Upload size={22} className="text-neutral-500" />
-                <span className="text-xs font-semibold text-neutral-300">
+              <label className="border-2 border-dashed border-[#E5D7CE] hover:border-[#FF4A70] rounded-2xl p-4 flex flex-col items-center justify-center gap-2 bg-[#FAF4F0] cursor-pointer transition">
+                <Upload size={22} className="text-[#8A767E]" />
+                <span className="text-xs font-semibold text-[#2D151E]">
                   Tap to upload MoMo transfer screenshot
                 </span>
-                <span className="text-[10px] text-neutral-500">
+                <span className="text-[10px] text-[#8A767E]">
                   PNG, JPG or JPEG from your Mobile Money SMS or App
                 </span>
                 <input
@@ -851,7 +851,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
           <button
             type="submit"
             disabled={isSubmitting || !isCameroon}
-            className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 disabled:opacity-40 text-neutral-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition cursor-pointer"
+            className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white font-extrabold text-xs shadow-md shadow-rose-500/25 transition cursor-pointer disabled:opacity-50"
           >
             {isSubmitting ? 'Sending Request...' : `Submit ${(buySparks.sparks * 500).toLocaleString()} CFA Top-Up for Approval`}
           </button>
@@ -860,16 +860,16 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
 
       {/* TAB 3: TRANSFER SPARKS */}
       {activeTab === 'send' && (
-        <form onSubmit={handleSendSubmit} className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 space-y-4 shadow-xl">
+        <form onSubmit={handleSendSubmit} className="bg-white border border-[#EFE3DB] rounded-3xl p-5 space-y-4 shadow-sm">
           <div>
-            <h3 className="text-sm font-bold text-white mb-1">Transfer Sparks</h3>
-            <p className="text-xs text-neutral-400">
+            <h3 className="text-sm font-bold text-[#2D151E] mb-1">Transfer Sparks</h3>
+            <p className="text-xs text-[#8A767E]">
               Send Sparks instantly to another JudmiSpark member anywhere.
             </p>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1">
+            <label className="block text-xs font-semibold text-[#8A767E] mb-1">
               Recipient Wallet ID, Email, or Phone
             </label>
             <input
@@ -878,12 +878,12 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
               value={sendSparks.recipientWalletId}
               onChange={(e) => setSendSparks({ ...sendSparks, recipientWalletId: e.target.value })}
               placeholder="e.g. SPK-104928, sarah.bda@gmail.com or 671..."
-              className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
+              className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] focus:outline-none focus:border-[#FF4A70]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1">
+            <label className="block text-xs font-semibold text-[#8A767E] mb-1">
               Amount (Sparks)
             </label>
             <input
@@ -893,15 +893,15 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
               required
               value={sendSparks.amount}
               onChange={(e) => setSendSparks({ ...sendSparks, amount: parseInt(e.target.value) || 1 })}
-              className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
+              className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] focus:outline-none focus:border-[#FF4A70]"
             />
-            <span className="text-[11px] text-neutral-500 mt-1 block">
+            <span className="text-[11px] text-[#8A767E] mt-1 block">
               Value: {(sendSparks.amount * 500).toLocaleString()} CFA • Available: {availableBalance} Sparks
             </span>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1">
+            <label className="block text-xs font-semibold text-[#8A767E] mb-1">
               Note (Optional)
             </label>
             <input
@@ -909,14 +909,14 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
               value={sendSparks.note}
               onChange={(e) => setSendSparks({ ...sendSparks, note: e.target.value })}
               placeholder="e.g. Thanks for the meetup drinks!"
-              className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
+              className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] focus:outline-none focus:border-[#FF4A70]"
             />
           </div>
 
           <button
             type="submit"
             disabled={availableBalance < sendSparks.amount || sendSparks.amount <= 0}
-            className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 disabled:opacity-40 text-neutral-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition cursor-pointer"
+            className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white font-extrabold text-xs shadow-md shadow-rose-500/25 transition cursor-pointer disabled:opacity-50"
           >
             Confirm & Send {sendSparks.amount} Sparks
           </button>
@@ -925,16 +925,16 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
 
       {/* TAB 4: WITHDRAW (MoMo Cashout with MoMo Number and Name) */}
       {activeTab === 'withdraw' && (
-        <form onSubmit={handleWithdrawSubmit} className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 space-y-4 shadow-xl">
+        <form onSubmit={handleWithdrawSubmit} className="bg-white border border-[#EFE3DB] rounded-3xl p-5 space-y-4 shadow-sm">
           <div>
-            <h3 className="text-sm font-bold text-white mb-1">Withdraw Sparks to Mobile Money</h3>
-            <p className="text-xs text-neutral-400">
+            <h3 className="text-sm font-bold text-[#2D151E] mb-1">Withdraw Sparks to Mobile Money</h3>
+            <p className="text-xs text-[#8A767E]">
               Min withdrawal: 5 Sparks (2,500 CFA). 5% service fee applies. Funds are sent directly to your MoMo after admin approval.
             </p>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1">
+            <label className="block text-xs font-semibold text-[#8A767E] mb-1">
               Sparks to Withdraw (Min: 5)
             </label>
             <input
@@ -944,18 +944,18 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
               required
               value={withdrawSparks.sparks}
               onChange={(e) => setWithdrawSparks({ ...withdrawSparks, sparks: parseInt(e.target.value) || 5 })}
-              className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
+              className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] focus:outline-none focus:border-[#FF4A70]"
             />
-            <div className="p-2.5 bg-neutral-950 border border-neutral-800 rounded-xl mt-2 text-[11px] space-y-1 text-neutral-400">
+            <div className="p-2.5 bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl mt-2 text-[11px] space-y-1 text-[#8A767E]">
               <div className="flex justify-between">
                 <span>Gross Value:</span>
-                <span className="text-white">{(withdrawSparks.sparks * 500).toLocaleString()} CFA</span>
+                <span className="text-[#2D151E] font-bold">{(withdrawSparks.sparks * 500).toLocaleString()} CFA</span>
               </div>
               <div className="flex justify-between">
                 <span>5% Platform Fee:</span>
-                <span className="text-rose-400">-{Math.round(withdrawSparks.sparks * 500 * 0.05).toLocaleString()} CFA</span>
+                <span className="text-rose-600 font-bold">-{Math.round(withdrawSparks.sparks * 500 * 0.05).toLocaleString()} CFA</span>
               </div>
-              <div className="flex justify-between font-bold border-t border-neutral-800 pt-1 text-amber-400">
+              <div className="flex justify-between font-bold border-t border-[#E5D7CE] pt-1 text-[#FF4A70]">
                 <span>Net You Receive:</span>
                 <span>{Math.round(withdrawSparks.sparks * 500 * 0.95).toLocaleString()} CFA</span>
               </div>
@@ -963,7 +963,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+            <label className="block text-xs font-semibold text-[#8A767E] mb-1.5">
               Payout Provider
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -972,8 +972,8 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                 onClick={() => setWithdrawSparks({ ...withdrawSparks, provider: 'MTN_MOMO' })}
                 className={`py-2 px-3 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   withdrawSparks.provider === 'MTN_MOMO' 
-                    ? 'bg-amber-500 text-neutral-950 border-amber-500' 
-                    : 'bg-neutral-950 border-neutral-800 text-neutral-400'
+                    ? 'bg-amber-500 text-white border-amber-500 shadow-xs' 
+                    : 'bg-[#FAF4F0] border-[#E5D7CE] text-[#8A767E]'
                 }`}
               >
                 <Smartphone size={14} />
@@ -985,8 +985,8 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                 onClick={() => setWithdrawSparks({ ...withdrawSparks, provider: 'ORANGE_MONEY' })}
                 className={`py-2 px-3 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
                   withdrawSparks.provider === 'ORANGE_MONEY' 
-                    ? 'bg-amber-500 text-neutral-950 border-amber-500' 
-                    : 'bg-neutral-950 border-neutral-800 text-neutral-400'
+                    ? 'bg-orange-500 text-white border-orange-500 shadow-xs' 
+                    : 'bg-[#FAF4F0] border-[#E5D7CE] text-[#8A767E]'
                 }`}
               >
                 <Smartphone size={14} />
@@ -998,8 +998,8 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
           {/* MoMo Number and Name */}
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold text-neutral-300 mb-1">
-                Your Mobile Money Number <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-[#8A767E] mb-1">
+                Your Mobile Money Number <span className="text-rose-500">*</span>
               </label>
               <input
                 type="tel"
@@ -1007,13 +1007,13 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                 value={withdrawSparks.momoNumber}
                 onChange={(e) => setWithdrawSparks({ ...withdrawSparks, momoNumber: e.target.value })}
                 placeholder="e.g. 671234567"
-                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] focus:outline-none focus:border-[#FF4A70]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-neutral-300 mb-1">
-                Registered MoMo Account Name <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-[#8A767E] mb-1">
+                Registered MoMo Account Name <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
@@ -1021,9 +1021,9 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
                 value={withdrawSparks.momoAccountName}
                 onChange={(e) => setWithdrawSparks({ ...withdrawSparks, momoAccountName: e.target.value })}
                 placeholder="e.g. Sarah Nfor (Full name on SIM card)"
-                className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-[#FAF4F0] border border-[#E5D7CE] rounded-xl p-2.5 text-xs text-[#2D151E] focus:outline-none focus:border-[#FF4A70]"
               />
-              <span className="text-[10px] text-neutral-500 mt-0.5 block">
+              <span className="text-[10px] text-[#8A767E] mt-0.5 block">
                 Admin will verify this name matches the MoMo transfer confirmation before releasing funds.
               </span>
             </div>
@@ -1032,7 +1032,7 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
           <button
             type="submit"
             disabled={availableBalance < withdrawSparks.sparks || withdrawSparks.sparks < 5 || !isCameroon}
-            className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 disabled:opacity-40 text-neutral-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition cursor-pointer"
+            className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white font-extrabold text-xs shadow-md shadow-rose-500/25 transition cursor-pointer disabled:opacity-50"
           >
             Submit Cashout Request to Admin
           </button>
@@ -1041,33 +1041,33 @@ export const WalletView: React.FC<WalletViewProps> = ({ currentUser, onRefreshUs
 
       {/* Screenshot Preview Modal */}
       {viewingScreenshot && (
-        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-neutral-900 border border-neutral-800 rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl flex flex-col">
-            <div className="p-3 border-b border-neutral-800 flex items-center justify-between">
-              <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                <ImageIcon size={14} className="text-amber-400" />
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-[#EFE3DB] rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl flex flex-col">
+            <div className="p-3.5 border-b border-[#F2E7DF] flex items-center justify-between">
+              <span className="text-xs font-bold text-[#2D151E] flex items-center gap-1.5">
+                <ImageIcon size={14} className="text-[#FF4A70]" />
                 <span>Payment Screenshot Proof</span>
               </span>
               <button
                 type="button"
                 onClick={() => setViewingScreenshot(null)}
-                className="p-1 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800 cursor-pointer"
+                className="w-7 h-7 rounded-full bg-[#F2E7DF] text-[#7A666F] hover:text-[#2D151E] flex items-center justify-center cursor-pointer"
               >
-                <X size={16} />
+                <X size={14} />
               </button>
             </div>
-            <div className="p-3 flex items-center justify-center bg-black">
+            <div className="p-3 flex items-center justify-center bg-[#FAF4F0]">
               <img
                 src={viewingScreenshot}
                 alt="MoMo Payment Receipt"
-                className="max-h-[60vh] max-w-full rounded-xl object-contain border border-neutral-800"
+                className="max-h-[60vh] max-w-full rounded-2xl object-contain border border-[#E5D7CE]"
               />
             </div>
-            <div className="p-3 bg-neutral-950 border-t border-neutral-800 text-center">
+            <div className="p-3 bg-white border-t border-[#F2E7DF] text-center">
               <button
                 type="button"
                 onClick={() => setViewingScreenshot(null)}
-                className="py-2 px-6 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs transition cursor-pointer"
+                className="py-2.5 px-6 rounded-full bg-[#2D151E] hover:bg-black text-white font-bold text-xs transition cursor-pointer"
               >
                 Close Preview
               </button>

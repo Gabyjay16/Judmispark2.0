@@ -95,25 +95,25 @@ export const ReferralPromoModal: React.FC<ReferralPromoModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-neutral-900 border border-amber-500/40 rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl max-h-[92vh] flex flex-col relative overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="bg-white border border-[#EFE3DB] rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl max-h-[92vh] flex flex-col relative overflow-hidden">
         {/* Glow ambient decoration */}
-        <div className="absolute top-0 right-0 w-44 h-44 bg-amber-500/15 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-44 h-44 bg-rose-500/10 rounded-full blur-3xl -ml-10 -mb-10 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-44 h-44 bg-[#FF874F]/15 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-44 h-44 bg-[#FF4A70]/10 rounded-full blur-3xl -ml-10 -mb-10 pointer-events-none" />
 
         {/* Header with Close */}
         <div className="flex items-start justify-between relative z-10">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 text-neutral-950 flex items-center justify-center font-black shadow-lg shadow-amber-500/25 shrink-0">
-              <Crown size={22} className="fill-neutral-950" />
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white flex items-center justify-center font-black shadow-lg shadow-rose-500/25 shrink-0">
+              <Crown size={22} className="fill-white" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-black tracking-wider uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-black tracking-wider uppercase bg-[#FAF4F0] text-[#FF4A70] border border-[#FF4A70]/30 px-2 py-0.5 rounded-full">
                   Special First-Time Offer
                 </span>
               </div>
-              <h3 className="text-lg font-black text-white mt-0.5">
+              <h3 className="text-lg font-black text-[#2D151E] mt-0.5">
                 Get Free Premium VIP! 👑
               </h3>
             </div>
@@ -123,7 +123,7 @@ export const ReferralPromoModal: React.FC<ReferralPromoModalProps> = ({
             type="button"
             onClick={onClose}
             title="Close"
-            className="p-2 rounded-xl bg-neutral-800 text-neutral-400 hover:text-white border border-neutral-700/80 transition shrink-0 cursor-pointer"
+            className="p-2 rounded-full bg-[#FAF4F0] text-[#8A767E] hover:text-[#2D151E] border border-[#E5D7CE] transition shrink-0 cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -132,18 +132,18 @@ export const ReferralPromoModal: React.FC<ReferralPromoModalProps> = ({
         {/* Scrollable Content */}
         <div className="space-y-4 overflow-y-auto pr-1 flex-1 relative z-10">
           {/* Promo Explainer Card */}
-          <div className="bg-gradient-to-br from-amber-950/40 via-neutral-950 to-neutral-950 border border-amber-500/30 rounded-2xl p-3.5 space-y-2">
-            <p className="text-xs text-neutral-200 leading-relaxed font-medium">
-              Invite your friends or singles to <strong className="text-white">JudmiSpark</strong>. When someone registers with your invite code, your account <strong className="text-amber-300">instantly unlocks 100% Free Premium VIP Service</strong> (Worth 5,000 CFA / month)!
+          <div className="bg-[#FAF4F0] border border-[#E5D7CE] rounded-2xl p-3.5 space-y-2">
+            <p className="text-xs text-[#5C454F] leading-relaxed font-medium">
+              Invite your friends or singles to <strong className="text-[#2D151E]">JudmiSpark</strong>. When someone registers with your invite code, your account <strong className="text-[#FF4A70]">instantly unlocks 100% Free Premium VIP Service</strong> (Worth 5,000 CFA / month)!
             </p>
 
             {/* Referral Code Box */}
-            <div className="bg-neutral-900 border border-amber-500/40 rounded-xl p-2.5 flex items-center justify-between gap-2 mt-2">
+            <div className="bg-white border border-[#E5D7CE] rounded-xl p-2.5 flex items-center justify-between gap-2 mt-2 shadow-2xs">
               <div className="min-w-0">
-                <span className="text-[9px] font-bold uppercase tracking-wider text-neutral-400 block">
+                <span className="text-[9px] font-bold uppercase tracking-wider text-[#8A767E] block">
                   Your Personal Invite Code
                 </span>
-                <span className="text-sm font-mono font-extrabold text-amber-300 tracking-wider">
+                <span className="text-sm font-mono font-extrabold text-[#FF4A70] tracking-wider">
                   {referralCode}
                 </span>
               </div>
@@ -152,7 +152,7 @@ export const ReferralPromoModal: React.FC<ReferralPromoModalProps> = ({
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="py-1.5 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-neutral-950 font-bold text-xs flex items-center gap-1 transition active:scale-95 shadow cursor-pointer"
+                  className="py-1.5 px-3 rounded-full bg-gradient-to-r from-[#F73B66] to-[#FF874F] text-white font-bold text-xs flex items-center gap-1 transition active:scale-95 shadow cursor-pointer"
                 >
                   {copied ? <Check size={12} /> : <Copy size={12} />}
                   <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -161,7 +161,7 @@ export const ReferralPromoModal: React.FC<ReferralPromoModalProps> = ({
                 <button
                   type="button"
                   onClick={handleShare}
-                  className="py-1.5 px-2.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-semibold text-xs border border-neutral-700 flex items-center gap-1 transition active:scale-95 cursor-pointer"
+                  className="py-1.5 px-2.5 rounded-full bg-[#FAF4F0] hover:bg-[#F2E7DF] text-[#2D151E] font-semibold text-xs border border-[#E5D7CE] flex items-center gap-1 transition active:scale-95 cursor-pointer"
                   title="Share Invite"
                 >
                   <Share2 size={12} />
@@ -173,30 +173,30 @@ export const ReferralPromoModal: React.FC<ReferralPromoModalProps> = ({
           {/* Premium Services List */}
           <div className="space-y-2">
             <div className="flex items-center justify-between px-1">
-              <h4 className="text-xs font-black uppercase tracking-wider text-neutral-300 flex items-center gap-1.5">
-                <Sparkles size={13} className="text-amber-400" />
+              <h4 className="text-xs font-black uppercase tracking-wider text-[#2D151E] flex items-center gap-1.5">
+                <Sparkles size={13} className="text-[#FF4A70]" />
                 <span>Premium Services You Will Receive:</span>
               </h4>
-              <span className="text-[10px] font-bold text-amber-400">All Included</span>
+              <span className="text-[10px] font-bold text-[#FF4A70]">All Included</span>
             </div>
 
             <div className="grid grid-cols-1 gap-2">
               {premiumServices.map((service, idx) => (
                 <div 
                   key={idx}
-                  className="bg-neutral-950/80 border border-neutral-800/90 rounded-2xl p-2.5 flex items-start gap-3 hover:border-amber-500/30 transition"
+                  className="bg-[#FAF4F0] border border-[#E5D7CE] rounded-2xl p-2.5 flex items-start gap-3 hover:border-[#FF4A70]/40 transition"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-8 h-8 rounded-xl bg-white border border-[#E5D7CE] flex items-center justify-center shrink-0 mt-0.5 text-[#FF4A70]">
                     {service.icon}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h5 className="text-xs font-bold text-white flex items-center justify-between">
+                    <h5 className="text-xs font-bold text-[#2D151E] flex items-center justify-between">
                       <span>{service.title}</span>
-                      <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20">
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded-full border border-emerald-200">
                         FREE
                       </span>
                     </h5>
-                    <p className="text-[11px] text-neutral-400 leading-normal mt-0.5">
+                    <p className="text-[11px] text-[#8A767E] leading-normal mt-0.5">
                       {service.desc}
                     </p>
                   </div>
@@ -207,14 +207,14 @@ export const ReferralPromoModal: React.FC<ReferralPromoModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="pt-2 border-t border-neutral-800 flex items-center gap-2 relative z-10">
+        <div className="pt-2 border-t border-[#EFE3DB] flex items-center gap-2 relative z-10">
           <button
             type="button"
             onClick={() => {
               handleShare();
               onClose();
             }}
-            className="flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-neutral-950 font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 transition active:scale-95 cursor-pointer"
+            className="flex-1 py-3 px-4 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] hover:opacity-95 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md shadow-rose-500/25 transition active:scale-95 cursor-pointer"
           >
             <Share2 size={15} />
             <span>Share Invite & Unlock VIP</span>
@@ -223,7 +223,7 @@ export const ReferralPromoModal: React.FC<ReferralPromoModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="py-3 px-4 rounded-2xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-bold text-xs border border-neutral-700 transition active:scale-95 cursor-pointer"
+            className="py-3 px-4 rounded-full bg-[#FAF4F0] hover:bg-[#F2E7DF] text-[#8A767E] hover:text-[#2D151E] font-bold text-xs border border-[#E5D7CE] transition active:scale-95 cursor-pointer"
           >
             <span>Explore App</span>
           </button>

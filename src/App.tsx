@@ -259,7 +259,7 @@ export default function App() {
   // If user is logged out, show the public Home / Landing Page
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
+      <div className="min-h-screen bg-[#FAF4F0] text-[#2D151E] flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
         <LandingHomeView
           onOpenRegister={() => setIsRegistrationOpen(true)}
           onLoginSuccess={(user) => {
@@ -290,30 +290,27 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
+    <div className="min-h-screen bg-[#FAF4F0] text-[#2D151E] flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
       {/* TOP APPLICATION BAR */}
-      <header className="sticky top-0 z-40 bg-neutral-900/90 backdrop-blur-md border-b border-neutral-800">
-        <div className="max-w-md md:max-w-3xl mx-auto px-4 py-2.5 flex items-center justify-between">
-          {/* Brand Logo */}
+      <header className="sticky top-0 z-40 bg-[#FAF4F0]/90 backdrop-blur-md border-b border-[#F0E2DA]">
+        <div className="max-w-md md:max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+          {/* Brand Logo with Coral 'J' circle as in screenshot */}
           <div 
             onClick={() => setActiveTab('discover')}
-            className="flex items-center gap-2 cursor-pointer select-none group"
+            className="flex items-center gap-2.5 cursor-pointer select-none group"
           >
-            <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-600 flex items-center justify-center text-white font-black text-base shadow-lg shadow-rose-500/30 group-hover:scale-105 transition-transform">
-              ⚡
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FF4A70] to-[#FF7B60] flex items-center justify-center text-white font-black text-sm shadow-md shadow-rose-500/20 group-hover:scale-105 transition-transform">
+              J
             </div>
             <div>
               <div className="flex items-center gap-1">
-                <span className="text-base font-black tracking-tight text-white">
-                  Judmi<span className="text-rose-500">Spark</span>
+                <span className="text-base font-black tracking-tight text-[#2D151E]">
+                  JudmiSpark
                 </span>
-                <span className="text-[10px] font-extrabold bg-rose-500/10 text-rose-400 px-1.5 py-0.2 rounded border border-rose-500/20">
+                <span className="text-[10px] font-extrabold bg-[#FF4A70]/10 text-[#FF4A70] px-1.5 py-0.2 rounded-full border border-[#FF4A70]/20">
                   CM
                 </span>
               </div>
-              <span className="text-[10px] text-neutral-400 block -mt-0.5 font-medium">
-                Voice-Verified Social Platform
-              </span>
             </div>
           </div>
 
@@ -324,14 +321,14 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => setActiveTab('admin')}
-                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold transition cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold transition cursor-pointer ${
                   activeTab === 'admin'
-                    ? 'bg-amber-500 text-neutral-950 border-amber-400 shadow-md shadow-amber-500/20'
-                    : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border-amber-500/30'
+                    ? 'bg-gradient-to-r from-[#F07238] via-[#F17E3F] to-[#E56830] text-white border-transparent shadow-md shadow-orange-500/20'
+                    : 'bg-[#F2E7DF] hover:bg-[#EBDED6] text-[#2D151E] border-[#E5D7CE]'
                 }`}
                 title="Admin Dashboard & Wallet Approvals"
               >
-                <ShieldAlert size={14} />
+                <ShieldAlert size={14} className={activeTab === 'admin' ? 'text-white' : 'text-[#F07238]'} />
                 <span className="hidden sm:inline">Admin Hub</span>
               </button>
             )}
@@ -340,12 +337,12 @@ export default function App() {
             <button
               type="button"
               onClick={() => setIsNotificationsOpen(true)}
-              className="relative p-2 rounded-xl bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700/60 transition"
+              className="relative p-2 rounded-full bg-white text-[#2D151E] hover:bg-[#F8EFEA] border border-[#EADBD2] transition shadow-2xs cursor-pointer"
               title="Notifications"
             >
               <Bell size={16} />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center shadow-md">
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#FF4A70] text-white text-[10px] font-bold flex items-center justify-center shadow-md">
                   {unreadCount}
                 </span>
               )}
@@ -435,20 +432,20 @@ export default function App() {
         )}
       </main>
 
-      {/* MOBILE-FIRST FLOATING BOTTOM NAVIGATION BAR */}
-      <nav id="bottom-navigation-bar" className="fixed bottom-0 left-0 right-0 z-40 bg-neutral-900/95 backdrop-blur-lg border-t border-neutral-800/90 py-1.5 px-2 sm:px-4">
-        <div className="max-w-md mx-auto flex items-center justify-around">
+      {/* FLOATING SLEEK PILL DOCK (MATCHING SCREENSHOT AESTHETIC) */}
+      <nav id="bottom-navigation-bar" className="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-md bg-[#221B1E]/95 backdrop-blur-md border border-white/10 rounded-full shadow-2xl px-2 py-1.5">
+        <div className="flex items-center justify-around">
           {/* 1. Discover */}
           <button
             type="button"
             onClick={() => setActiveTab('discover')}
-            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition ${
+            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition cursor-pointer ${
               activeTab === 'discover' 
-                ? 'text-rose-500 font-bold scale-105' 
-                : 'text-neutral-400 hover:text-neutral-200'
+                ? 'text-[#FF4A70] font-bold' 
+                : 'text-[#A898A0] hover:text-white'
             }`}
           >
-            <Flame size={20} className={activeTab === 'discover' ? 'fill-rose-500/20' : ''} />
+            <Flame size={19} className={activeTab === 'discover' ? 'fill-[#FF4A70]/20' : ''} />
             <span className="text-[10px] mt-0.5">Discover</span>
           </button>
 
@@ -456,13 +453,13 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('matches')}
-            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition ${
+            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition cursor-pointer ${
               activeTab === 'matches' 
-                ? 'text-rose-500 font-bold scale-105' 
-                : 'text-neutral-400 hover:text-neutral-200'
+                ? 'text-[#FF4A70] font-bold' 
+                : 'text-[#A898A0] hover:text-white'
             }`}
           >
-            <MessageCircle size={20} className={activeTab === 'matches' ? 'fill-rose-500/20' : ''} />
+            <MessageCircle size={19} className={activeTab === 'matches' ? 'fill-[#FF4A70]/20' : ''} />
             <span className="text-[10px] mt-0.5">Matches</span>
           </button>
 
@@ -470,13 +467,13 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('linkup')}
-            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition ${
+            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition cursor-pointer ${
               activeTab === 'linkup' 
-                ? 'text-amber-400 font-bold scale-105' 
-                : 'text-neutral-400 hover:text-neutral-200'
+                ? 'text-[#F39C24] font-bold' 
+                : 'text-[#A898A0] hover:text-white'
             }`}
           >
-            <Zap size={20} className={activeTab === 'linkup' ? 'fill-amber-400/20' : ''} />
+            <Zap size={19} className={activeTab === 'linkup' ? 'fill-[#F39C24]/20' : ''} />
             <span className="text-[10px] mt-0.5">Link Up</span>
           </button>
 
@@ -484,13 +481,13 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('talk')}
-            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition ${
+            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition cursor-pointer ${
               activeTab === 'talk' 
-                ? 'text-rose-500 font-bold scale-105' 
-                : 'text-neutral-400 hover:text-neutral-200'
+                ? 'text-[#FF4A70] font-bold' 
+                : 'text-[#A898A0] hover:text-white'
             }`}
           >
-            <HeartHandshake size={20} />
+            <HeartHandshake size={19} />
             <span className="text-[10px] mt-0.5">Talk</span>
           </button>
 
@@ -498,13 +495,13 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('events')}
-            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition ${
+            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition cursor-pointer ${
               activeTab === 'events' 
-                ? 'text-rose-500 font-bold scale-105' 
-                : 'text-neutral-400 hover:text-neutral-200'
+                ? 'text-[#FF4A70] font-bold' 
+                : 'text-[#A898A0] hover:text-white'
             }`}
           >
-            <Calendar size={20} />
+            <Calendar size={19} />
             <span className="text-[10px] mt-0.5">Events</span>
           </button>
 
@@ -512,13 +509,13 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('profile')}
-            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition ${
+            className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition cursor-pointer ${
               activeTab === 'profile' 
-                ? 'text-rose-500 font-bold scale-105' 
-                : 'text-neutral-400 hover:text-neutral-200'
+                ? 'text-[#FF4A70] font-bold' 
+                : 'text-[#A898A0] hover:text-white'
             }`}
           >
-            <User size={20} />
+            <User size={19} />
             <span className="text-[10px] mt-0.5">Profile</span>
           </button>
         </div>

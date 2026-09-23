@@ -389,18 +389,18 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
 
       {/* MATCH MODAL POPUP */}
       {isMatchPopupOpen && lastMatchedUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-          <div className="bg-gradient-to-b from-neutral-900 via-rose-950/40 to-neutral-900 border border-rose-500/40 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white flex items-center justify-center mx-auto mb-3 shadow-lg shadow-rose-500/30">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-white border border-[#EFE3DB] rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#FF4A70] to-[#FF7B60] text-white flex items-center justify-center mx-auto mb-3 shadow-lg shadow-rose-500/25">
               <Sparkles size={28} />
             </div>
-            <span className="text-[11px] font-bold text-rose-400 tracking-wider uppercase">
+            <span className="text-[11px] font-bold text-[#FF4A70] tracking-wider uppercase">
               It's a JudmiSpark Match!
             </span>
-            <h3 className="text-xl font-extrabold text-white mt-1">
+            <h3 className="text-xl font-extrabold text-[#2D151E] mt-1">
               You and {lastMatchedUser.displayName}
             </h3>
-            <p className="text-xs text-neutral-300 mt-1 mb-4">
+            <p className="text-xs text-[#7A666F] mt-1 mb-4">
               You both felt the spark! Remember: Match chats require exchanging voice notes within 5 messages.
             </p>
 
@@ -408,15 +408,15 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
               <img 
                 src={currentUser.profilePicture} 
                 alt="You" 
-                className="w-16 h-16 rounded-full object-cover border-2 border-rose-500 shadow-md"
+                className="w-16 h-16 rounded-full object-cover border-2 border-[#FF4A70] shadow-md"
               />
-              <div className="w-8 h-8 rounded-full bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 font-bold">
+              <div className="w-8 h-8 rounded-full bg-[#FF4A70]/15 border border-[#FF4A70]/30 flex items-center justify-center text-[#FF4A70] font-bold">
                 ⚡
               </div>
               <img 
                 src={lastMatchedUser.profilePicture} 
                 alt={lastMatchedUser.displayName} 
-                className="w-16 h-16 rounded-full object-cover border-2 border-rose-500 shadow-md"
+                className="w-16 h-16 rounded-full object-cover border-2 border-[#FF4A70] shadow-md"
               />
             </div>
 
@@ -427,14 +427,14 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
                   setIsMatchPopupOpen(false);
                   onMatchCreated(lastMatchedUser);
                 }}
-                className="w-full py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold text-xs shadow-lg shadow-rose-500/25 transition hover:scale-[1.02]"
+                className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white font-extrabold text-xs shadow-md shadow-rose-500/25 transition hover:opacity-95"
               >
                 Send Voice Note or Message
               </button>
               <button
                 type="button"
                 onClick={() => setIsMatchPopupOpen(false)}
-                className="w-full py-2 text-xs text-neutral-400 hover:text-neutral-200 transition"
+                className="w-full py-2 text-xs font-semibold text-[#8A767E] hover:text-[#2D151E] transition cursor-pointer"
               >
                 Keep Discovering
               </button>
@@ -445,46 +445,46 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
 
       {/* ADVERTISEMENT CARD (Inserted every 3-4 profiles) */}
       {activeAd ? (
-        <div id="advertisement-card" className="flex-1 min-h-0 flex flex-col bg-neutral-900 border border-neutral-800 rounded-3xl overflow-hidden shadow-2xl relative">
+        <div id="advertisement-card" className="flex-1 min-h-0 flex flex-col bg-white border border-[#EFE3DB] rounded-3xl overflow-hidden shadow-xl relative">
           <div className="relative h-60 sm:h-64 w-full overflow-hidden bg-neutral-950">
             <img 
               src={activeAd.imageUrl} 
               alt={activeAd.title} 
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#2D151E] via-transparent to-black/40" />
             
             {/* SPONSORED Badge */}
-            <div className="absolute top-4 left-4 bg-amber-500/90 text-neutral-950 text-[10px] font-black tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md flex items-center gap-1">
+            <div className="absolute top-4 left-4 bg-amber-400 text-neutral-950 text-[10px] font-black tracking-wider uppercase px-2.5 py-1 rounded-full shadow-md flex items-center gap-1">
               <span>SPONSORED</span>
             </div>
 
-            <div className="absolute top-4 right-4 text-xs text-neutral-300 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+            <div className="absolute top-4 right-4 text-xs text-white bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
               {activeAd.advertiserName}
             </div>
           </div>
 
-          <div className="p-4 flex-1 flex flex-col justify-between">
+          <div className="p-4 flex-1 flex flex-col justify-between bg-white">
             <div>
-              <h3 className="text-base font-bold text-white mb-1">
+              <h3 className="text-base font-bold text-[#2D151E] mb-1">
                 {activeAd.title}
               </h3>
-              <p className="text-xs text-neutral-300 leading-relaxed mb-3">
+              <p className="text-xs text-[#7A666F] leading-relaxed mb-3">
                 {activeAd.description}
               </p>
-              <div className="flex items-center gap-2 text-[11px] text-neutral-400 mb-3">
-                <MapPin size={12} className="text-rose-500" />
+              <div className="flex items-center gap-2 text-[11px] text-[#8A767E] mb-3">
+                <MapPin size={12} className="text-[#FF4A70]" />
                 <span>Featured for: {activeAd.targetTowns.join(', ')}</span>
               </div>
             </div>
 
-            <div className="space-y-2 pt-2 border-t border-neutral-800">
+            <div className="space-y-2 pt-2 border-t border-[#F2E7DF]">
               <a
                 href={activeAd.destinationUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleAdClick}
-                className="w-full py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-neutral-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition"
+                className="w-full py-3 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md shadow-rose-500/25 transition"
               >
                 <span>{activeAd.ctaButtonText}</span>
                 <ExternalLink size={14} />
@@ -493,7 +493,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
               <button
                 type="button"
                 onClick={handleDismissAd}
-                className="w-full py-1.5 rounded-xl text-neutral-400 hover:text-white text-xs font-medium transition"
+                className="w-full py-1.5 rounded-xl text-[#8A767E] hover:text-[#2D151E] text-xs font-semibold transition cursor-pointer"
               >
                 Continue Discovering
               </button>
@@ -504,7 +504,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
         /* MAIN PROFILE CARD */
         <div 
           id={`profile-card-${currentProfile.id}`}
-          className="flex-1 min-h-0 flex flex-col bg-neutral-900 border border-neutral-800 rounded-3xl overflow-hidden shadow-2xl relative group"
+          className="flex-1 min-h-0 flex flex-col bg-white border border-[#EFE3DB] rounded-3xl overflow-hidden shadow-xl relative group"
         >
           {/* Main Photo & Video Swiper Carousel with In-Card Location & Matching Algorithm Filter */}
           <DiscoverMediaCarousel
@@ -522,7 +522,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
           />
 
           {/* Card Body with Voice Note & Interests */}
-          <div className="p-3 space-y-2 bg-neutral-900 shrink-0 flex flex-col justify-between">
+          <div className="p-3 space-y-2 bg-white shrink-0 flex flex-col justify-between">
             {/* Permanent Voice Introduction Player */}
             <div>
               <AudioPlayer
@@ -544,8 +544,8 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
                     key={interest} 
                     className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border transition ${
                       isShared 
-                        ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm' 
-                        : 'bg-neutral-800 text-neutral-300 border-neutral-700/60'
+                        ? 'bg-[#FF4A70]/10 text-[#FF4A70] border-[#FF4A70]/30 shadow-2xs font-bold' 
+                        : 'bg-[#FAF4F0] text-[#7A666F] border-[#E9DDD5]'
                     }`}
                   >
                     {isShared ? `⚡ ${interest}` : interest}
@@ -553,20 +553,20 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
                 );
               })}
               {currentProfile.interests.length > 4 && (
-                <span className="text-[10px] font-medium text-neutral-400 px-1 py-0.5">
+                <span className="text-[10px] font-medium text-[#8A767E] px-1 py-0.5">
                   +{currentProfile.interests.length - 4} more
                 </span>
               )}
             </div>
 
             {/* Action Buttons: Pass (X), Swap (Middle), and Like (Heart) */}
-            <div className="flex items-center justify-center gap-5 pt-1.5 border-t border-neutral-800/80">
+            <div className="flex items-center justify-center gap-5 pt-1.5 border-t border-[#F2E7DF]">
               {/* Pass Button */}
               <button
                 id="discover-pass-btn"
                 type="button"
                 onClick={() => handleInteraction('pass')}
-                className="w-12 h-12 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-rose-400 flex items-center justify-center shadow-lg border border-neutral-700 transition hover:scale-110 active:scale-95 group"
+                className="w-12 h-12 rounded-full bg-[#FAF4F0] hover:bg-[#F2E7DF] text-[#7A666F] hover:text-[#FF4A70] flex items-center justify-center shadow-sm border border-[#E5D7CE] transition hover:scale-110 active:scale-95 group cursor-pointer"
                 title="Pass"
               >
                 <X size={22} className="group-hover:rotate-90 transition-transform" />
@@ -577,10 +577,10 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
                 id="discover-swap-btn"
                 type="button"
                 onClick={goToNextProfile}
-                className="h-11 px-4 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-200 hover:text-white flex items-center gap-2 border border-neutral-700 shadow-md transition hover:scale-105 active:scale-95 group font-bold text-xs"
+                className="h-11 px-5 rounded-full bg-[#2D151E] hover:bg-black text-white flex items-center gap-2 border border-[#2D151E] shadow-md transition hover:scale-105 active:scale-95 group font-bold text-xs cursor-pointer"
                 title="Swap to Next User Card"
               >
-                <Repeat size={16} className="text-amber-400 group-hover:rotate-180 transition-transform duration-300" />
+                <Repeat size={15} className="text-[#FF7B60] group-hover:rotate-180 transition-transform duration-300" />
                 <span>Swap</span>
               </button>
 
@@ -589,11 +589,9 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
                 id="discover-like-btn"
                 type="button"
                 onClick={handleHeartClick}
-                className={`w-12 h-12 rounded-full ${
-                  isCurrentProfileLiked 
-                    ? 'bg-gradient-to-tr from-rose-600 to-pink-600 ring-2 ring-rose-400' 
-                    : 'bg-gradient-to-tr from-rose-500 to-pink-600'
-                } text-white flex items-center justify-center shadow-xl shadow-rose-500/30 hover:shadow-rose-500/50 transition hover:scale-110 active:scale-95 group`}
+                className={`w-12 h-12 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white flex items-center justify-center shadow-lg shadow-rose-500/25 hover:shadow-rose-500/40 transition hover:scale-110 active:scale-95 group cursor-pointer ${
+                  isCurrentProfileLiked ? 'ring-2 ring-[#FF4A70]' : ''
+                }`}
                 title="Single tap to Like ❤️ | Double tap to send Hello 👋"
               >
                 <Heart size={22} className={`fill-current transition-transform ${isCurrentProfileLiked ? 'scale-110' : 'group-hover:scale-110'}`} />
@@ -603,14 +601,14 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
         </div>
       ) : (
         /* EMPTY STATE: All profiles swiped or filtered */
-        <div id="discover-empty-state" className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-neutral-900/60 border border-neutral-800 rounded-3xl my-auto">
-          <div className="w-16 h-16 rounded-3xl bg-neutral-800 border border-neutral-700 flex items-center justify-center text-rose-500 mb-4 shadow-lg">
+        <div id="discover-empty-state" className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-white border border-[#EFE3DB] rounded-3xl my-auto shadow-sm">
+          <div className="w-16 h-16 rounded-3xl bg-[#FAF4F0] border border-[#E5D7CE] flex items-center justify-center text-[#FF4A70] mb-4 shadow-sm">
             <Sparkles size={32} />
           </div>
-          <h3 className="text-lg font-bold text-white mb-1">
+          <h3 className="text-lg font-extrabold text-[#2D151E] mb-1">
             No Matching Profiles Right Now
           </h3>
-          <p className="text-xs text-neutral-400 max-w-xs mb-4">
+          <p className="text-xs text-[#8A767E] max-w-xs mb-4">
             No profiles found matching your active filter ({filterSummary}). Try broadening your age limit or location.
           </p>
 
@@ -618,7 +616,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
             <button
               type="button"
               onClick={() => setIsFilterModalOpen(true)}
-              className="py-2.5 px-4 rounded-2xl bg-rose-500 hover:bg-rose-600 text-xs font-bold text-white shadow-lg shadow-rose-500/25 transition flex items-center justify-center gap-1.5"
+              className="py-2.5 px-5 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white text-xs font-bold shadow-md shadow-rose-500/20 transition flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Sliders size={14} />
               <span>Adjust Discovery Filters</span>
@@ -631,7 +629,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
                 localStorage.removeItem('judmispark_swiped_profiles');
                 setFilters(DEFAULT_DISCOVER_FILTERS);
               }}
-              className="py-2.5 px-4 rounded-2xl bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-xs font-semibold text-neutral-200 transition"
+              className="py-2.5 px-5 rounded-full bg-[#FAF4F0] hover:bg-[#F2E7DF] border border-[#E5D7CE] text-xs font-semibold text-[#2D151E] transition cursor-pointer"
             >
               Reset Swipes & Filters
             </button>
@@ -643,20 +641,20 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
       {feedbackToast && (
         <div 
           id="discover-action-toast"
-          className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 max-w-sm w-[90%] bg-neutral-900/95 border border-neutral-700/80 text-white px-3.5 py-2.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200"
+          className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 max-w-sm w-[90%] bg-[#2D151E]/95 border border-[#482834] text-white px-3.5 py-2.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200"
         >
           <div className="flex items-center gap-2.5 min-w-0">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm shrink-0 shadow-md ${
               feedbackToast.type === 'removed' 
-                ? 'bg-neutral-800 text-rose-400 border border-neutral-700' 
+                ? 'bg-white/10 text-rose-300 border border-white/15' 
                 : feedbackToast.type === 'like'
-                ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
-                : 'bg-gradient-to-tr from-rose-500 to-pink-500 text-white shadow-rose-500/20'
+                ? 'bg-rose-500/20 text-[#FF7B60] border border-rose-500/40'
+                : 'bg-gradient-to-tr from-[#FF4A70] to-[#FF7B60] text-white shadow-rose-500/20'
             }`}>
               {feedbackToast.type === 'removed' ? (
                 <Trash2 size={15} />
               ) : feedbackToast.type === 'like' ? (
-                <Heart size={15} className="fill-rose-500 text-rose-500" />
+                <Heart size={15} className="fill-[#FF4A70] text-[#FF4A70]" />
               ) : (
                 '👋'
               )}
@@ -676,7 +674,7 @@ export const DiscoverView: React.FC<DiscoverViewProps> = ({
           <button 
             type="button" 
             onClick={() => setFeedbackToast(null)}
-            className="text-neutral-400 hover:text-white p-1 rounded-lg transition shrink-0"
+            className="text-neutral-400 hover:text-white p-1 rounded-lg transition shrink-0 cursor-pointer"
             title="Dismiss"
           >
             <X size={14} />

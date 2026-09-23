@@ -220,10 +220,10 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-md">
       <div 
         id="chat-modal-container"
-        className="bg-neutral-900 border border-neutral-800 rounded-3xl w-full max-w-lg h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+        className="bg-white border border-[#EFE3DB] rounded-3xl w-full max-w-lg h-[90vh] flex flex-col shadow-2xl overflow-hidden"
       >
         {/* Hidden Native File Input */}
         <input 
@@ -235,7 +235,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
         />
 
         {/* CHAT HEADER */}
-        <div className="p-3.5 sm:p-4 border-b border-neutral-800 bg-neutral-900/95 flex items-center justify-between gap-3 shrink-0">
+        <div className="p-3.5 sm:p-4 border-b border-[#EFE3DB] bg-white flex items-center justify-between gap-3 shrink-0">
           <div 
             onClick={() => onOpenProfile && onOpenProfile(otherUser)}
             className="flex items-center gap-3 min-w-0 cursor-pointer group"
@@ -244,7 +244,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
               <img 
                 src={otherUser.profilePicture} 
                 alt={otherUser.displayName} 
-                className="w-11 h-11 rounded-full object-cover border-2 border-rose-500/50 group-hover:border-rose-400 transition"
+                className="w-11 h-11 rounded-full object-cover border-2 border-[#FF4A70] group-hover:opacity-90 transition"
               />
               {isBothVoiceCompleted && (
                 <span title="Voice Verified Match" className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px]">
@@ -255,20 +255,20 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <h3 className="text-sm font-bold text-white truncate group-hover:text-rose-400 transition">
+                <h3 className="text-sm font-bold text-[#2D151E] truncate group-hover:text-[#FF4A70] transition">
                   {otherUser.displayName}
                 </h3>
-                <span className="text-[11px] text-neutral-400">
+                <span className="text-[11px] text-[#8A767E]">
                   {otherUser.age ? `${otherUser.age} • ` : ''}{otherUser.town}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-[11px]">
                 {isBothVoiceCompleted ? (
-                  <span className="text-emerald-400 flex items-center gap-1 font-medium">
+                  <span className="text-emerald-700 flex items-center gap-1 font-medium">
                     <ShieldCheck size={11} /> Voice Verified
                   </span>
                 ) : (
-                  <span className="text-rose-400 flex items-center gap-1 font-medium">
+                  <span className="text-[#FF4A70] flex items-center gap-1 font-medium">
                     <Mic size={11} /> Voice exchange required
                   </span>
                 )}
@@ -282,7 +282,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                 type="button"
                 onClick={() => onOpenProfile(otherUser)}
                 title="View Full Profile"
-                className="p-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white border border-neutral-700 text-xs font-semibold flex items-center gap-1 transition"
+                className="p-2 rounded-full bg-[#FAF4F0] hover:bg-[#F2E7DF] text-[#2D151E] border border-[#E5D7CE] text-xs font-semibold flex items-center gap-1 transition cursor-pointer"
               >
                 <Eye size={14} />
                 <span className="hidden sm:inline">Profile</span>
@@ -293,7 +293,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
               type="button"
               onClick={() => onGiftSpark(otherUser)}
               title="Gift Spark"
-              className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 text-xs font-semibold flex items-center gap-1 transition"
+              className="p-2 rounded-full bg-[#FAF4F0] text-[#FF4A70] border border-[#E5D7CE] hover:bg-[#F2E7DF] text-xs font-semibold flex items-center gap-1 transition cursor-pointer"
             >
               <Gift size={14} />
               <span className="hidden sm:inline">Gift</span>
@@ -303,7 +303,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
               type="button"
               onClick={() => onReportVoiceIdentity(currentConv, otherUser)}
               title="Report Voice Identity"
-              className="p-2 rounded-xl text-neutral-400 hover:text-amber-400 hover:bg-neutral-800 border border-neutral-800 text-xs flex items-center gap-1 transition"
+              className="p-2 rounded-full text-[#8A767E] hover:text-[#2D151E] hover:bg-[#FAF4F0] border border-[#E5D7CE] text-xs flex items-center gap-1 transition cursor-pointer"
             >
               <Flag size={14} />
             </button>
@@ -311,7 +311,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="w-8 h-8 rounded-xl text-neutral-400 hover:text-white hover:bg-neutral-800 flex items-center justify-center transition"
+              className="w-8 h-8 rounded-full text-[#8A767E] hover:text-[#2D151E] hover:bg-[#FAF4F0] flex items-center justify-center transition cursor-pointer"
             >
               <X size={18} />
             </button>
@@ -322,16 +322,16 @@ export const ChatModal: React.FC<ChatModalProps> = ({
         {!isBothVoiceCompleted && (
           <div className={`p-2.5 text-xs border-b flex items-center justify-between gap-2 shrink-0 ${
             isLockedForMe 
-              ? 'bg-rose-950/40 border-rose-500/40 text-rose-200' 
+              ? 'bg-rose-50 border-rose-200 text-rose-700' 
               : messagesRemaining <= 3
-              ? 'bg-amber-950/30 border-amber-500/30 text-amber-200'
-              : 'bg-neutral-900 border-neutral-800 text-neutral-300'
+              ? 'bg-amber-50 border-amber-200 text-amber-800'
+              : 'bg-[#FAF4F0] border-[#EFE3DB] text-[#2D151E]'
           }`}>
             <div className="flex items-center gap-2 min-w-0">
               {isLockedForMe ? (
-                <Lock size={14} className="text-rose-400 shrink-0" />
+                <Lock size={14} className="text-rose-500 shrink-0" />
               ) : (
-                <AlertTriangle size={14} className="text-amber-400 shrink-0" />
+                <AlertTriangle size={14} className="text-amber-500 shrink-0" />
               )}
               <span className="truncate">
                 {isLockedForMe ? (
@@ -350,7 +350,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
               <button
                 type="button"
                 onClick={() => setIsRecordingModalOpen(true)}
-                className="px-2.5 py-1 rounded-lg bg-rose-500 hover:bg-rose-600 text-white font-bold text-[11px] shrink-0 transition"
+                className="px-3 py-1 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] hover:opacity-95 text-white font-bold text-[11px] shrink-0 transition cursor-pointer shadow-xs"
               >
                 Send Voice Note
               </button>
@@ -359,37 +359,37 @@ export const ChatModal: React.FC<ChatModalProps> = ({
         )}
 
         {/* MESSAGES & PERMANENTLY OPEN USER PROFILE FEED */}
-        <div id="chat-messages-scroll" className="flex-1 overflow-y-auto p-4 space-y-4 bg-neutral-950/60">
+        <div id="chat-messages-scroll" className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#FAF4F0]">
           {/* PERMANENT OPEN USER PROFILE CARD (CANNOT BE CLOSED) */}
           <div 
             id="chat-open-profile-card"
-            className="p-4 bg-gradient-to-b from-neutral-900/95 to-neutral-900/80 border border-neutral-800 rounded-3xl max-w-sm mx-auto shadow-xl space-y-3"
+            className="p-4 bg-white border border-[#EFE3DB] rounded-3xl max-w-sm mx-auto shadow-2xs space-y-3"
           >
             {/* User Header */}
             <div className="flex items-center gap-3">
               <img 
                 src={otherUser.profilePicture} 
                 alt={otherUser.displayName} 
-                className="w-14 h-14 rounded-2xl object-cover border-2 border-rose-500/40 shadow-md"
+                className="w-14 h-14 rounded-2xl object-cover border-2 border-[#FF4A70] shadow-xs"
               />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <h4 className="text-base font-black text-white truncate">
+                  <h4 className="text-base font-black text-[#2D151E] truncate">
                     {otherUser.displayName}
                   </h4>
-                  <span className="text-xs text-neutral-400 font-semibold">
+                  <span className="text-xs text-[#8A767E] font-semibold">
                     {otherUser.age ? `${otherUser.age} yrs` : ''}
                   </span>
                   {otherUser.isVerified && (
-                    <ShieldCheck size={16} className="text-emerald-400 shrink-0" />
+                    <ShieldCheck size={16} className="text-emerald-600 shrink-0" />
                   )}
                 </div>
-                <div className="flex items-center gap-1 text-xs text-neutral-400 mt-0.5">
+                <div className="flex items-center gap-1 text-xs text-[#8A767E] mt-0.5">
                   <span className="truncate">{otherUser.town}</span>
                   {otherUser.neighborhood && <span>• {otherUser.neighborhood}</span>}
                 </div>
                 {otherUser.relationshipIntention && (
-                  <span className="inline-block mt-1 text-[10px] font-bold bg-rose-500/10 text-rose-300 border border-rose-500/20 px-2 py-0.5 rounded-full">
+                  <span className="inline-block mt-1 text-[10px] font-bold bg-[#FF4A70]/10 text-[#FF4A70] border border-[#FF4A70]/20 px-2 py-0.5 rounded-full">
                     Looking for: {otherUser.relationshipIntention}
                   </span>
                 )}
@@ -398,7 +398,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
             {/* Bio */}
             {otherUser.bio && (
-              <p className="text-xs text-neutral-300 leading-relaxed bg-neutral-950/50 p-2.5 rounded-2xl border border-neutral-800/80">
+              <p className="text-xs text-[#5C454F] leading-relaxed bg-[#FAF4F0] p-2.5 rounded-2xl border border-[#E5D7CE]">
                 {otherUser.bio}
               </p>
             )}
@@ -409,7 +409,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                 {otherUser.interests.map(interest => (
                   <span 
                     key={interest}
-                    className="text-[10px] font-medium bg-neutral-800 text-neutral-300 px-2.5 py-0.5 rounded-full border border-neutral-700"
+                    className="text-[10px] font-medium bg-[#FAF4F0] text-[#8A767E] px-2.5 py-0.5 rounded-full border border-[#E5D7CE]"
                   >
                     {interest}
                   </span>
@@ -429,8 +429,8 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                 <div 
                   className={`max-w-[85%] sm:max-w-[78%] rounded-2xl p-2.5 text-xs leading-relaxed space-y-1.5 ${
                     isMe 
-                      ? 'bg-rose-600 text-white rounded-tr-sm shadow-md shadow-rose-600/20' 
-                      : 'bg-neutral-800 text-neutral-100 rounded-tl-sm border border-neutral-700/60'
+                      ? 'bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white rounded-tr-xs shadow-xs' 
+                      : 'bg-white text-[#2D151E] rounded-tl-xs border border-[#EFE3DB] shadow-2xs'
                   }`}
                 >
                   {/* Photo attachment in message */}
@@ -478,13 +478,13 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                   )}
                 </div>
 
-                <div className="flex items-center gap-1 text-[10px] text-neutral-500 mt-1 px-1">
+                <div className="flex items-center gap-1 text-[10px] text-[#8A767E] mt-1 px-1">
                   <span>
                     {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                   {isMe && (
                     <span>
-                      {msg.read ? <CheckCheck size={11} className="text-rose-400" /> : <Check size={11} />}
+                      {msg.read ? <CheckCheck size={11} className="text-[#FF4A70]" /> : <Check size={11} />}
                     </span>
                   )}
                 </div>
@@ -496,9 +496,9 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
         {/* SELECTED PHOTO PREVIEW STRIP (BEFORE SENDING) */}
         {selectedPhotoUrl && (
-          <div className="px-3.5 py-2 bg-neutral-950 border-t border-neutral-800 flex items-center justify-between gap-3 animate-in fade-in duration-200">
+          <div className="px-3.5 py-2 bg-[#FAF4F0] border-t border-[#EFE3DB] flex items-center justify-between gap-3 animate-in fade-in duration-200">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-rose-500/40 shrink-0">
+              <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-[#FF4A70] shrink-0">
                 <img 
                   src={selectedPhotoUrl} 
                   alt="Selected upload" 
@@ -506,14 +506,14 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                 />
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-white">Photo ready to send</p>
-                <p className="text-[10px] text-neutral-400 truncate">Add an optional message below</p>
+                <p className="text-xs font-semibold text-[#2D151E]">Photo ready to send</p>
+                <p className="text-[10px] text-[#8A767E] truncate">Add an optional message below</p>
               </div>
             </div>
             <button
               type="button"
               onClick={() => setSelectedPhotoUrl(null)}
-              className="p-1.5 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white transition"
+              className="p-1.5 rounded-full bg-white hover:bg-[#F2E7DF] text-[#8A767E] hover:text-[#2D151E] border border-[#E5D7CE] transition cursor-pointer"
               title="Remove photo"
             >
               <X size={14} />
@@ -522,16 +522,16 @@ export const ChatModal: React.FC<ChatModalProps> = ({
         )}
 
         {/* INPUT STRIP */}
-        <div className="p-3 bg-neutral-900 border-t border-neutral-800 shrink-0">
+        <div className="p-3 bg-white border-t border-[#EFE3DB] shrink-0">
           {isLockedForMe ? (
-            <div className="p-3 bg-rose-950/30 border border-rose-500/30 rounded-2xl text-center space-y-2">
-              <p className="text-xs font-semibold text-rose-300">
+            <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl text-center space-y-2">
+              <p className="text-xs font-semibold text-rose-700">
                 Messaging locked. Exchange voice notes to continue!
               </p>
               <button
                 type="button"
                 onClick={() => setIsRecordingModalOpen(true)}
-                className="py-2.5 px-5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold flex items-center justify-center gap-1.5 mx-auto shadow-lg shadow-rose-500/25 transition"
+                className="py-2.5 px-5 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] hover:opacity-95 text-white text-xs font-bold flex items-center justify-center gap-1.5 mx-auto shadow-md shadow-rose-500/25 transition cursor-pointer"
               >
                 <Mic size={14} />
                 <span>Record & Send Voice Note</span>
@@ -548,10 +548,10 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                   }
                 }}
                 title="Attach photo from device"
-                className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition border ${
+                className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition border cursor-pointer ${
                   selectedPhotoUrl 
-                    ? 'bg-rose-500 text-white border-rose-400' 
-                    : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white border-neutral-700/60'
+                    ? 'bg-[#FF4A70] text-white border-[#FF4A70]' 
+                    : 'bg-[#FAF4F0] hover:bg-[#F2E7DF] text-[#2D151E] border-[#E5D7CE]'
                 }`}
               >
                 <ImageIcon size={18} />
@@ -562,7 +562,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                 type="button"
                 onClick={() => setShowPhotoPickerModal(true)}
                 title="Photo ideas & camera"
-                className="w-10 h-10 rounded-2xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white border border-neutral-700/60 hidden sm:flex items-center justify-center shrink-0 transition"
+                className="w-10 h-10 rounded-full bg-[#FAF4F0] hover:bg-[#F2E7DF] text-[#2D151E] border border-[#E5D7CE] hidden sm:flex items-center justify-center shrink-0 transition cursor-pointer"
               >
                 <Camera size={17} />
               </button>
@@ -572,7 +572,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                 type="button"
                 onClick={() => setIsRecordingModalOpen(true)}
                 title="Send Voice Note"
-                className="w-10 h-10 rounded-2xl bg-neutral-800 hover:bg-rose-500/20 text-neutral-300 hover:text-rose-400 border border-neutral-700/60 flex items-center justify-center shrink-0 transition"
+                className="w-10 h-10 rounded-full bg-[#FAF4F0] hover:bg-[#F2E7DF] text-[#FF4A70] border border-[#E5D7CE] flex items-center justify-center shrink-0 transition cursor-pointer"
               >
                 <Mic size={18} />
               </button>
@@ -583,14 +583,14 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder={selectedPhotoUrl ? "Add a caption for your photo..." : "Type a message..."}
-                className="flex-1 bg-neutral-950 border border-neutral-800 rounded-2xl py-2.5 px-4 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-rose-500"
+                className="flex-1 bg-[#FAF4F0] border border-[#E5D7CE] rounded-full py-2.5 px-4 text-xs text-[#2D151E] placeholder-[#8A767E] focus:outline-none focus:border-[#FF4A70]"
               />
 
               {/* Submit / Send button */}
               <button
                 type="submit"
                 disabled={!inputText.trim() && !selectedPhotoUrl}
-                className="w-10 h-10 rounded-2xl bg-rose-500 hover:bg-rose-600 disabled:opacity-40 disabled:hover:bg-rose-500 text-white flex items-center justify-center shrink-0 transition shadow-md shadow-rose-500/20"
+                className="w-10 h-10 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] hover:opacity-95 disabled:opacity-40 text-white flex items-center justify-center shrink-0 transition shadow-md shadow-rose-500/20 cursor-pointer"
               >
                 <Send size={16} />
               </button>
@@ -600,17 +600,17 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
         {/* PHOTO PICKER / PRESET MODAL */}
         {showPhotoPickerModal && (
-          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-            <div className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 max-w-sm w-full space-y-4 shadow-2xl animate-in zoom-in-95 duration-150">
-              <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Camera size={16} className="text-rose-400" />
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+            <div className="bg-white border border-[#EFE3DB] rounded-3xl p-5 max-w-sm w-full space-y-4 shadow-2xl animate-in zoom-in-95 duration-150">
+              <div className="flex items-center justify-between border-b border-[#EFE3DB] pb-3">
+                <h3 className="text-sm font-bold text-[#2D151E] flex items-center gap-2">
+                  <Camera size={16} className="text-[#FF4A70]" />
                   <span>Send a Photo</span>
                 </h3>
                 <button
                   type="button"
                   onClick={() => setShowPhotoPickerModal(false)}
-                  className="text-neutral-400 hover:text-white"
+                  className="text-[#8A767E] hover:text-[#2D151E] cursor-pointer"
                 >
                   <X size={16} />
                 </button>
@@ -623,14 +623,14 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                   setShowPhotoPickerModal(false);
                   fileInputRef.current?.click();
                 }}
-                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-rose-500/25 transition hover:scale-[1.02]"
+                className="w-full py-3 px-4 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] hover:opacity-95 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md shadow-rose-500/20 transition cursor-pointer"
               >
                 <ImageIcon size={16} />
                 <span>Upload From Device / Camera</span>
               </button>
 
               <div className="space-y-2">
-                <p className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider">
+                <p className="text-[11px] font-semibold text-[#8A767E] uppercase tracking-wider">
                   Or pick a photo prompt:
                 </p>
                 <div className="grid grid-cols-2 gap-2">
@@ -641,7 +641,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                         setSelectedPhotoUrl(preset.url);
                         setShowPhotoPickerModal(false);
                       }}
-                      className="group/p relative h-24 rounded-2xl overflow-hidden border border-neutral-800 hover:border-rose-500/60 cursor-pointer shadow-md transition"
+                      className="group/p relative h-24 rounded-2xl overflow-hidden border border-[#E5D7CE] hover:border-[#FF4A70] cursor-pointer shadow-xs transition"
                     >
                       <img 
                         src={preset.url} 
@@ -669,7 +669,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
               <button
                 type="button"
                 onClick={() => setPreviewLightboxUrl(null)}
-                className="absolute top-2 right-2 p-2 rounded-full bg-black/70 hover:bg-neutral-800 text-white border border-neutral-700 shadow-xl transition"
+                className="absolute top-2 right-2 p-2 rounded-full bg-black/70 hover:bg-black/90 text-white border border-white/20 shadow-xl transition cursor-pointer"
                 title="Close Photo"
               >
                 <X size={20} />
@@ -677,7 +677,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
               <img 
                 src={previewLightboxUrl} 
                 alt="Enlarged shared photo" 
-                className="max-h-[80vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl border border-neutral-800"
+                className="max-h-[80vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl border border-white/20"
                 onClick={(e) => e.stopPropagation()}
               />
             </div>
@@ -686,7 +686,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
         {/* VOICE RECORDER MODAL */}
         {isRecordingModalOpen && (
-          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
             <AudioRecorder
               isRegistration={false}
               userName={currentUser.displayName}

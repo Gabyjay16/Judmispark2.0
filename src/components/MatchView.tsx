@@ -444,25 +444,25 @@ export const MatchView: React.FC<MatchViewProps> = ({
           }}
           className={`relative z-10 ${
             isAwaiting 
-              ? 'bg-gradient-to-r from-neutral-900 via-amber-950/20 to-neutral-900 border border-amber-500/30 hover:border-amber-500/50 shadow-amber-950/10' 
-              : 'bg-neutral-900/95 border border-neutral-800 hover:border-neutral-700'
-          } ${isSelected ? 'ring-2 ring-rose-500 bg-rose-950/20' : ''} p-3.5 flex items-center justify-between gap-3 shadow-lg transition-colors cursor-pointer group`}
+              ? 'bg-[#FFF9F5] border border-[#FF4A70]/30 hover:border-[#FF4A70]' 
+              : 'bg-white border border-[#EFE3DB] hover:border-[#E5D7CE]'
+          } ${isSelected ? 'ring-2 ring-[#FF4A70] bg-[#FF4A70]/10' : ''} p-3.5 flex items-center justify-between gap-3 shadow-2xs transition-colors cursor-pointer group`}
         >
           {/* Multi-Select Checkbox */}
           {isSelectionMode && (
             <div 
-              className="shrink-0 text-neutral-400 hover:text-white transition"
+              className="shrink-0 text-[#8A767E] hover:text-[#2D151E] transition cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 toggleSelectItem(conv.id);
               }}
             >
               {isSelected ? (
-                <div className="w-5 h-5 rounded-md bg-rose-500 text-white flex items-center justify-center shadow-sm">
+                <div className="w-5 h-5 rounded-md bg-[#FF4A70] text-white flex items-center justify-center shadow-xs">
                   <Check size={14} />
                 </div>
               ) : (
-                <div className="w-5 h-5 rounded-md border-2 border-neutral-600 bg-neutral-800" />
+                <div className="w-5 h-5 rounded-md border-2 border-[#E5D7CE] bg-[#FAF4F0]" />
               )}
             </div>
           )}
@@ -475,16 +475,16 @@ export const MatchView: React.FC<MatchViewProps> = ({
                 alt={otherUser.displayName} 
                 className={`w-12 h-12 rounded-full object-cover border-2 ${
                   isAwaiting 
-                    ? 'border-amber-400/60' 
+                    ? 'border-[#FF4A70]' 
                     : isLikeInitiated 
-                    ? 'border-rose-500' 
-                    : 'border-neutral-700'
+                    ? 'border-[#FF4A70]' 
+                    : 'border-[#E5D7CE]'
                 }`}
               />
               {isAwaiting ? (
-                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-amber-400 rounded-full border-2 border-neutral-900" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-[#FF4A70] rounded-full border-2 border-white" />
               ) : isLikeInitiated ? (
-                <span title="Liked Profile" className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white flex items-center justify-center text-[9px] shadow-sm">
+                <span title="Liked Profile" className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#FF4A70] text-white flex items-center justify-center text-[9px] shadow-xs">
                   ❤️
                 </span>
               ) : isVoiceVerified ? (
@@ -492,7 +492,7 @@ export const MatchView: React.FC<MatchViewProps> = ({
                   ✓
                 </span>
               ) : (
-                <span title="Voice Exchange Incomplete" className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white flex items-center justify-center text-[10px]">
+                <span title="Voice Exchange Incomplete" className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#FF4A70] text-white flex items-center justify-center text-[10px]">
                   🎙
                 </span>
               )}
@@ -500,30 +500,30 @@ export const MatchView: React.FC<MatchViewProps> = ({
 
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 flex-wrap">
-                <h4 className="text-sm font-bold text-white truncate group-hover:text-rose-400 transition">
+                <h4 className="text-sm font-bold text-[#2D151E] truncate group-hover:text-[#FF4A70] transition">
                   {otherUser.displayName}
                 </h4>
-                <span className="text-[11px] text-neutral-400">
+                <span className="text-[11px] text-[#8A767E]">
                   {otherUser.age ? `${otherUser.age} • ` : ''}{otherUser.town}
                 </span>
 
                 {/* Dedicated badge indicating Likes */}
                 {isLikeInitiated && (
-                  <span className="text-[10px] bg-rose-500/15 border border-rose-500/30 text-rose-400 px-1.5 py-0.2 rounded font-bold flex items-center gap-0.5">
-                    <Heart size={8} className="fill-rose-400 text-rose-400" /> 
+                  <span className="text-[10px] bg-[#FF4A70]/10 border border-[#FF4A70]/25 text-[#FF4A70] px-1.5 py-0.2 rounded font-bold flex items-center gap-0.5">
+                    <Heart size={8} className="fill-[#FF4A70] text-[#FF4A70]" /> 
                     {conv.lastMessageSenderId === currentUser.id ? 'You Liked' : 'Liked You'}
                   </span>
                 )}
 
                 {isLocked && !isAwaiting && (
-                  <span className="text-[10px] bg-rose-950 border border-rose-500/30 text-rose-300 px-1.5 py-0.2 rounded font-semibold flex items-center gap-0.5">
+                  <span className="text-[10px] bg-[#FAF4F0] border border-[#E5D7CE] text-[#8A767E] px-1.5 py-0.2 rounded font-semibold flex items-center gap-0.5">
                     <Lock size={9} /> Locked
                   </span>
                 )}
               </div>
 
               <p className={`text-xs truncate mt-0.5 ${
-                isAwaiting ? 'text-amber-200/90 italic' : 'text-neutral-400'
+                isAwaiting ? 'text-[#FF4A70] font-semibold' : 'text-[#8A767E]'
               }`}>
                 {!isAwaiting && conv.lastMessageSenderId === currentUser.id ? 'You: ' : ''}
                 {isAwaiting ? `"${conv.lastMessageText}"` : conv.lastMessageText}
@@ -543,21 +543,21 @@ export const MatchView: React.FC<MatchViewProps> = ({
                   handleOpenConversation(conv, otherUser);
                 }
               }}
-              className="py-1.5 px-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-neutral-950 font-bold text-xs shrink-0 flex items-center gap-1 shadow-md shadow-amber-500/20 transition hover:scale-105"
+              className="py-1.5 px-3.5 rounded-full bg-gradient-to-r from-[#F73B66] via-[#FF5864] to-[#FF874F] text-white font-extrabold text-xs shrink-0 flex items-center gap-1 shadow-md shadow-rose-500/20 transition hover:opacity-95 cursor-pointer"
             >
               <span>Reply</span>
               <ArrowRight size={12} />
             </button>
           ) : (
             <div className="text-right shrink-0">
-              <span className="text-[10px] text-neutral-500 block">
+              <span className="text-[10px] text-[#8A767E] block">
                 {new Date(conv.lastMessageAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </span>
               <div className="mt-1 flex items-center justify-end gap-1">
                 {isVoiceVerified ? (
-                  <span className="text-[10px] text-emerald-400 font-medium">Verified</span>
+                  <span className="text-[10px] text-emerald-600 font-bold">Verified</span>
                 ) : (
-                  <span className="text-[10px] text-rose-400 font-medium">Need Voice</span>
+                  <span className="text-[10px] text-[#FF4A70] font-bold">Need Voice</span>
                 )}
               </div>
             </div>
@@ -572,13 +572,13 @@ export const MatchView: React.FC<MatchViewProps> = ({
       {/* Top Banner & Multi-Select Controls */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-black text-white flex items-center gap-2">
+          <h2 className="text-xl font-black text-[#2D151E] flex items-center gap-2">
             <span>Matches & Likes</span>
-            <span className="text-xs font-bold text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/20">
+            <span className="text-xs font-bold text-[#FF4A70] bg-[#FF4A70]/10 px-2.5 py-0.5 rounded-full border border-[#FF4A70]/20">
               {matchesList.length}
             </span>
           </h2>
-          <p className="text-xs text-neutral-400 mt-0.5">
+          <p className="text-xs text-[#8A767E] mt-0.5">
             Slide left to delete • Hold to select multiple
           </p>
         </div>
@@ -595,10 +595,10 @@ export const MatchView: React.FC<MatchViewProps> = ({
                 setIsSelectionMode(true);
               }
             }}
-            className={`text-xs px-3 py-1.5 rounded-xl font-semibold transition border ${
+            className={`text-xs px-3.5 py-1.5 rounded-full font-bold transition border cursor-pointer ${
               isSelectionMode 
-                ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' 
-                : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border-neutral-700'
+                ? 'bg-[#FF4A70]/15 text-[#FF4A70] border-[#FF4A70]/30' 
+                : 'bg-white hover:bg-[#FAF4F0] text-[#2D151E] border-[#E5D7CE] shadow-2xs'
             }`}
           >
             {isSelectionMode ? 'Done' : 'Select'}
@@ -610,11 +610,11 @@ export const MatchView: React.FC<MatchViewProps> = ({
       {newMatchesAndLikes.length > 0 && !isSelectionMode && (
         <div id="new-likes-stories-carousel" className="space-y-1.5">
           <div className="flex items-center justify-between px-0.5">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
-              <Heart size={12} className="fill-rose-500 text-rose-500 animate-pulse" />
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#FF4A70] flex items-center gap-1.5">
+              <Heart size={12} className="fill-[#FF4A70] text-[#FF4A70] animate-pulse" />
               New Matches & Likes ({newMatchesAndLikes.length})
             </span>
-            <span className="text-[10px] text-neutral-400 font-medium">
+            <span className="text-[10px] text-[#8A767E] font-medium">
               Tap to view & chat
             </span>
           </div>
@@ -630,24 +630,24 @@ export const MatchView: React.FC<MatchViewProps> = ({
                   onClick={() => {
                     markLikeAsSeenAndOpenProfile(user);
                   }}
-                  className="flex flex-col items-center gap-1 shrink-0 group focus:outline-none transition active:scale-95"
+                  className="flex flex-col items-center gap-1 shrink-0 group focus:outline-none transition active:scale-95 cursor-pointer"
                 >
                   <div className="relative">
-                    <div className="w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-400 group-hover:scale-105 transition-transform duration-200 shadow-md shadow-rose-500/20">
+                    <div className="w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-[#F73B66] via-[#FF5864] to-[#FF874F] group-hover:scale-105 transition-transform duration-200 shadow-md shadow-rose-500/20">
                       <img 
                         src={user.profilePicture} 
                         alt={user.displayName}
-                        className="w-full h-full rounded-full object-cover border-2 border-neutral-950" 
+                        className="w-full h-full rounded-full object-cover border-2 border-white" 
                       />
                     </div>
 
                     {/* Heart / Sparkle badge */}
-                    <div className={`absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full text-[9px] font-black flex items-center gap-0.5 shadow-sm border border-neutral-950 ${
+                    <div className={`absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full text-[9px] font-black flex items-center gap-0.5 shadow-sm border border-white ${
                       type === 'liked_you'
                         ? isUnseenLike 
-                          ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white animate-bounce'
-                          : 'bg-gradient-to-r from-rose-500 to-pink-500 text-white'
-                        : 'bg-neutral-800 text-rose-400'
+                          ? 'bg-gradient-to-r from-[#F73B66] to-[#FF874F] text-white animate-bounce'
+                          : 'bg-gradient-to-r from-[#F73B66] to-[#FF874F] text-white'
+                        : 'bg-white text-[#FF4A70] border border-[#E5D7CE]'
                     }`}>
                       <Heart size={8} className="fill-current" />
                       <span>{type === 'liked_you' ? 'Liked you' : 'Liked'}</span>
@@ -655,10 +655,10 @@ export const MatchView: React.FC<MatchViewProps> = ({
                   </div>
 
                   <div className="text-center w-16">
-                    <p className="text-[11px] font-bold text-neutral-200 truncate group-hover:text-rose-400 transition">
+                    <p className="text-[11px] font-bold text-[#2D151E] truncate group-hover:text-[#FF4A70] transition">
                       {user.displayName}
                     </p>
-                    <p className="text-[9px] text-neutral-400 truncate">
+                    <p className="text-[9px] text-[#8A767E] truncate">
                       {user.town}
                     </p>
                   </div>
@@ -673,17 +673,17 @@ export const MatchView: React.FC<MatchViewProps> = ({
       {isSelectionMode && (
         <div 
           id="multi-select-action-bar"
-          className="bg-neutral-900/95 border border-neutral-700 rounded-2xl p-3 flex items-center justify-between gap-2 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200"
+          className="bg-[#2D151E] border border-black/10 text-white rounded-2xl p-3 flex items-center justify-between gap-2 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200"
         >
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={toggleSelectAll}
-              className="text-xs font-semibold text-neutral-300 hover:text-white flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-neutral-800 hover:bg-neutral-700 transition"
+              className="text-xs font-semibold text-white/80 hover:text-white flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition cursor-pointer"
             >
               {selectedIds.size === matchesList.length ? (
                 <>
-                  <CheckSquare size={14} className="text-rose-400" />
+                  <CheckSquare size={14} className="text-[#FF7B60]" />
                   <span>Deselect All</span>
                 </>
               ) : (
@@ -693,7 +693,7 @@ export const MatchView: React.FC<MatchViewProps> = ({
                 </>
               )}
             </button>
-            <span className="text-xs font-bold text-rose-400">
+            <span className="text-xs font-bold text-[#FF7B60]">
               {selectedIds.size} selected
             </span>
           </div>
@@ -703,7 +703,7 @@ export const MatchView: React.FC<MatchViewProps> = ({
               type="button"
               disabled={selectedIds.size === 0}
               onClick={() => setShowConfirmDeleteModal(true)}
-              className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 disabled:opacity-40 disabled:hover:bg-rose-600 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-rose-600/30 transition active:scale-95"
+              className="px-3 py-1.5 rounded-xl bg-[#FF4A70] hover:bg-rose-600 disabled:opacity-40 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-rose-600/30 transition active:scale-95 cursor-pointer"
             >
               <Trash2 size={13} />
               <span>Delete ({selectedIds.size})</span>
@@ -714,7 +714,7 @@ export const MatchView: React.FC<MatchViewProps> = ({
                 setIsSelectionMode(false);
                 setSelectedIds(new Set());
               }}
-              className="p-1.5 rounded-xl text-neutral-400 hover:text-white hover:bg-neutral-800 transition"
+              className="p-1.5 rounded-xl text-white/60 hover:text-white hover:bg-white/10 transition cursor-pointer"
               title="Cancel"
             >
               <X size={16} />
@@ -728,39 +728,39 @@ export const MatchView: React.FC<MatchViewProps> = ({
         <button
           type="button"
           onClick={toggleAwaitingDropdown}
-          className="w-full bg-neutral-900/80 hover:bg-neutral-900 border border-neutral-800 hover:border-amber-500/40 rounded-2xl px-3.5 py-2.5 flex items-center justify-between transition-all group shadow-sm text-left cursor-pointer"
+          className="w-full bg-white hover:bg-[#FAF4F0] border border-[#EFE3DB] hover:border-[#FF4A70]/40 rounded-2xl px-3.5 py-2.5 flex items-center justify-between transition-all group shadow-2xs text-left cursor-pointer"
           title={isAwaitingDropdownOpen ? "Collapse Awaiting Messages" : "Expand Awaiting Messages"}
         >
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${hasNewAwaitingAlert ? 'bg-amber-400 animate-ping' : 'bg-amber-400'}`} />
-            <h3 className="text-xs font-bold text-amber-300 uppercase tracking-wider">
+            <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${hasNewAwaitingAlert ? 'bg-[#FF4A70] animate-ping' : 'bg-[#FF4A70]'}`} />
+            <h3 className="text-xs font-bold text-[#2D151E] uppercase tracking-wider">
               Awaiting Messages
             </h3>
             
             {/* Blinking / highlighted count pill when unseen new messages exist */}
             <span className={`inline-flex items-center justify-center min-w-[22px] h-5 px-1.5 rounded-full text-[11px] font-black transition-all ${
               hasNewAwaitingAlert 
-                ? 'bg-amber-400 text-neutral-950 ring-2 ring-amber-300 ring-offset-2 ring-offset-neutral-900 animate-pulse shadow-md shadow-amber-400/40 scale-105' 
-                : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                ? 'bg-[#FF4A70] text-white ring-2 ring-rose-300 animate-pulse shadow-md shadow-rose-400/40 scale-105' 
+                : 'bg-[#FF4A70]/15 text-[#FF4A70] border border-[#FF4A70]/30'
             }`}>
               {awaitingReplyMatches.length}
             </span>
 
             {hasNewAwaitingAlert && (
-              <span className="text-[10px] font-bold text-amber-400 animate-pulse tracking-wide uppercase">
+              <span className="text-[10px] font-bold text-[#FF4A70] animate-pulse tracking-wide uppercase">
                 New
               </span>
             )}
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="text-[10px] text-neutral-400 font-medium hidden sm:inline">
+            <span className="text-[10px] text-[#8A767E] font-medium hidden sm:inline">
               Pending reply
             </span>
-            <div className="w-6 h-6 rounded-full bg-neutral-800 flex items-center justify-center text-neutral-400 group-hover:text-amber-300 transition">
+            <div className="w-6 h-6 rounded-full bg-[#FAF4F0] flex items-center justify-center text-[#8A767E] group-hover:text-[#2D151E] transition">
               <ChevronDown 
                 size={14} 
-                className={`transition-transform duration-300 ${isAwaitingDropdownOpen ? 'rotate-180 text-amber-400' : ''}`} 
+                className={`transition-transform duration-300 ${isAwaitingDropdownOpen ? 'rotate-180 text-[#FF4A70]' : ''}`} 
               />
             </div>
           </div>
@@ -770,7 +770,7 @@ export const MatchView: React.FC<MatchViewProps> = ({
         {isAwaitingDropdownOpen && (
           <div className="space-y-2.5 animate-in fade-in slide-in-from-top-2 duration-200 pt-0.5">
             {awaitingReplyMatches.length === 0 ? (
-              <div className="p-4 rounded-2xl bg-neutral-900/60 border border-neutral-800 text-center text-xs text-neutral-400">
+              <div className="p-4 rounded-2xl bg-white border border-[#EFE3DB] text-center text-xs text-[#8A767E]">
                 No pending conversations awaiting your reply.
               </div>
             ) : (
@@ -790,25 +790,25 @@ export const MatchView: React.FC<MatchViewProps> = ({
       <div id="active-conversations-section" className="space-y-3 pt-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-            <h3 className="text-xs font-bold text-neutral-300 uppercase tracking-wider">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#FF4A70]" />
+            <h3 className="text-xs font-bold text-[#2D151E] uppercase tracking-wider">
               Active Messages ({activeConversations.length})
             </h3>
           </div>
-          <span className="text-[10px] text-neutral-400 font-medium">
+          <span className="text-[10px] text-[#8A767E] font-medium">
             Active conversations
           </span>
         </div>
 
         {activeConversations.length === 0 ? (
-          <div className="p-8 rounded-2xl bg-neutral-900/60 border border-neutral-800 text-center space-y-2">
-            <div className="w-10 h-10 rounded-full bg-neutral-800 text-neutral-400 flex items-center justify-center mx-auto">
+          <div className="p-8 rounded-2xl bg-white border border-[#EFE3DB] text-center space-y-2 shadow-2xs">
+            <div className="w-10 h-10 rounded-full bg-[#FAF4F0] text-[#8A767E] flex items-center justify-center mx-auto">
               <MessageCircle size={20} />
             </div>
-            <h4 className="text-xs font-semibold text-neutral-300">
+            <h4 className="text-xs font-bold text-[#2D151E]">
               No active conversations yet
             </h4>
-            <p className="text-[11px] text-neutral-500 max-w-xs mx-auto">
+            <p className="text-[11px] text-[#8A767E] max-w-xs mx-auto">
               Like more profiles in Discover to create new matches and start chatting!
             </p>
           </div>
@@ -829,21 +829,21 @@ export const MatchView: React.FC<MatchViewProps> = ({
       {showConfirmDeleteModal && (
         <div 
           id="confirm-delete-modal"
-          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setShowConfirmDeleteModal(false)}
         >
           <div 
-            className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 max-w-xs w-full text-center space-y-4 shadow-2xl animate-in zoom-in-95 duration-150"
+            className="bg-white border border-[#EFE3DB] rounded-3xl p-5 max-w-xs w-full text-center space-y-4 shadow-2xl animate-in zoom-in-95 duration-150"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-500/30 text-rose-400 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 border border-rose-200 flex items-center justify-center mx-auto">
               <Trash2 size={24} />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">
+              <h3 className="text-base font-bold text-[#2D151E]">
                 Delete {selectedIds.size} {selectedIds.size === 1 ? 'Conversation' : 'Conversations'}?
               </h3>
-              <p className="text-xs text-neutral-400 mt-1">
+              <p className="text-xs text-[#8A767E] mt-1">
                 This will remove the selected {selectedIds.size === 1 ? 'conversation' : 'conversations'} and all related messages from your inbox.
               </p>
             </div>
@@ -851,14 +851,14 @@ export const MatchView: React.FC<MatchViewProps> = ({
               <button
                 type="button"
                 onClick={() => setShowConfirmDeleteModal(false)}
-                className="flex-1 py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-neutral-300 transition"
+                className="flex-1 py-2.5 rounded-full bg-[#FAF4F0] hover:bg-[#F2E7DF] text-xs font-bold text-[#2D151E] transition cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleDeleteMultiple}
-                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-bold text-white shadow-lg shadow-rose-600/30 transition"
+                className="flex-1 py-2.5 rounded-full bg-rose-600 hover:bg-rose-700 text-xs font-bold text-white shadow-md shadow-rose-600/25 transition cursor-pointer"
               >
                 Delete
               </button>
@@ -871,20 +871,20 @@ export const MatchView: React.FC<MatchViewProps> = ({
       {toastMessage && (
         <div 
           id="matches-action-toast"
-          className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 max-w-sm w-[90%] bg-neutral-900/95 border border-neutral-700 text-white px-3.5 py-2.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200"
+          className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 max-w-sm w-[90%] bg-[#2D151E]/95 border border-[#482834] text-white px-3.5 py-2.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200"
         >
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-neutral-800 border border-neutral-700 text-rose-400 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-white/10 text-rose-300 flex items-center justify-center">
               <Trash2 size={14} />
             </div>
-            <span className="text-xs font-semibold text-neutral-200">
+            <span className="text-xs font-semibold text-white">
               {toastMessage}
             </span>
           </div>
           <button 
-            type="button"
+            type="button" 
             onClick={() => setToastMessage(null)}
-            className="text-neutral-400 hover:text-white p-1"
+            className="text-neutral-400 hover:text-white p-1 cursor-pointer"
           >
             <X size={14} />
           </button>
